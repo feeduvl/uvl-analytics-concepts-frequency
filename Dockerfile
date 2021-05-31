@@ -17,5 +17,6 @@ RUN cmake -S . -B . && make
 
 RUN echo "Result after CMake build: " && ls
 
+WORKDIR ..
 EXPOSE 9658
 CMD [ "python3", "./app.py" ]

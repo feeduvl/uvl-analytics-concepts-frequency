@@ -7,8 +7,8 @@ RUN pip3 install --upgrade pip -r requirements.txt
 
 COPY . .
 
-RUN apt-get install build-essential
-RUN apt-get update && apt-get -y install cmake protobuf-compiler
+RUN apt-get update && apt-get install build-essential
+RUN apt-get -y install cmake protobuf-compiler
 
 RUN cmake -S ./lib/ -B .
 

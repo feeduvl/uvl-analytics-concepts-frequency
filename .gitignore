@@ -3,6 +3,7 @@
 /__pychache__/
 /ignore/
 /lib/.idea/
+/lib/.git/
 /lib/cmake-build-debug/
 /feed_uvl_finding_comparatively.exe
 /frequencies.txt

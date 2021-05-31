@@ -4,6 +4,7 @@ project(feed_uvl_finding_comparatively)
 set(CMAKE_CXX_STANDARD 17)
 
 include_directories(includes/rapidxml)
+include_directories(src)
 
 add_executable(feed_uvl_finding_comparatively
         main.cpp

@@ -10,7 +10,8 @@ COPY . .
 RUN apt-get update && yes | apt-get install build-essential
 RUN apt-get -y install cmake protobuf-compiler
 
-RUN cd ./lib/
+
+WORKDIR lib
 
 RUN cmake -S . -B . && make
 

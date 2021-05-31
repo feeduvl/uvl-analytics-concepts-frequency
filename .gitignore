@@ -1,3 +1,6 @@
 /venv/
 /.idea/
 /__pychache__/
+/ignore/
+/lib/.idea/
+/lib/cmake-build-debug/

@@ -9,9 +9,9 @@ COPY . .
 
 RUN apt-get update && apt-get -y install cmake protobuf-compiler
 
-RUN cd lib && ccmake ../feed_uvl_finding_comparatively && make
+RUN cmake -S ./lib/ -B .
 
-RUN cd .. && ls
+RUN echo "Result after CMake build: " && ls
 
 EXPOSE 9658
 CMD [ "python3", "./app.py" ]

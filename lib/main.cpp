@@ -6,18 +6,11 @@
 #include "src/model/accepter_algo_1.h"
 #include "src/model_builder/directory_walker.h"
 #include "src/model_builder/frequency_manager.h"
-#include "src/io/json.h"
 using namespace std;
 
 
 /**
- * Call with arguments:
- * 1. command TODO
- * 2. directory path - perform analysis on all files in all subdirectories of this directory
- *
- * @param argc
- * @param argv
- * @return
+ * Command line interface for frequency-based text analysis (model training or execution)
  */
 int main(int argc, char** argv) {
     string command = argv[1];
@@ -47,7 +40,7 @@ int main(int argc, char** argv) {
         algo_1_model m = algo_1_model();
         m.setTermLength(stoi(concept_length));
         directory_walker walker = directory_walker<algo_1_model>(argv[4], accepterAlgo1, m);
-        m.write_concepts_to_file("frequencies.txt");
+        m.write_concepts_to_file("res/frequencies.txt");
         //.write_omitted_words_to_file("stopwords.txt");
 
     } else if (command == "run_algorithm"){
@@ -55,9 +48,9 @@ int main(int argc, char** argv) {
         //  run the algorithm as defined by the following arguments
         string algo_name = argv[3];
         string corpus_frequencies = argv[4];
-        string lemmatization_filename = "lemmatization-en.txt";
+        string lemmatization_filename = "res/lemmatization-en.txt";
         string analyze_text = argv[5];
-        string stopwords_file = "stopwords.txt";
+        string stopwords_file = "res/stopwords.txt";
         int return_num_concepts = stoi(argv[6]);
 
         algo_1_model m = algo_1_model();

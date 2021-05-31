@@ -12,7 +12,7 @@ RUN apt-get -y install cmake protobuf-compiler
 
 RUN cd ./lib/
 
-RUN cmake && make
+RUN cmake -S . -B . && make
 
 RUN echo "Result after CMake build: " && ls
 

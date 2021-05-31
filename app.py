@@ -20,7 +20,15 @@ def post_classification_result():
 
     app.logger.info("Running topic detection on: "+content["classify"])
 
-    process = subprocess.Popen(['./feed_uvl_finding_comparatively', "run_algorithm", "2", "algo1", "frequencies.txt", content["classify"], "20"],
+    listfiles = subprocess.Popen(["ls"],
+                                stdout=subprocess.PIPE,
+                                universal_newlines=True)
+
+    (stdout_data, stderr_data) = listfiles.communicate();
+
+    app.logger.info("All files: "+stdout_data)
+
+    process = subprocess.Popen(['./feed_uvl_finding_comparatively', "run_algorithm", "2", "algo1", "res/frequencies.txt", content["classify"], "20"],
                                stdout=subprocess.PIPE,
                                universal_newlines=True)
 

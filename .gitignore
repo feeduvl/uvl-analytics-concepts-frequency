@@ -4,3 +4,7 @@
 /ignore/
 /lib/.idea/
 /lib/cmake-build-debug/
+/feed_uvl_finding_comparatively.exe
+/frequencies.txt
+/lemmatization-en.txt
+/stopwords.txt

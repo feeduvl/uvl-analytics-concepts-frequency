@@ -1,7 +1,7 @@
 FROM debian:latest
 
 RUN apt update && apt install -y build-essential cmake python3 python3-pip && rm -rf /var/lib/apt/lists/*
-RUN gcc --version 
+RUN gcc --version
 WORKDIR /app
 
 COPY requirements.txt requirements.txt

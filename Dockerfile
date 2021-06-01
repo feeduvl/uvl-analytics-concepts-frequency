@@ -8,7 +8,21 @@ COPY . .
 
 WORKDIR lib
 
-RUN cmake -S . -B . && make
+RUN g++ -Wall main.cpp \
+        ./src/graph/concept_node.h \
+        ./src/model/accepter_algo_1.h \
+        ./src/model/algo_1_model.h \
+        ./src/model/file_accepter.h \
+        ./src/model/model.h \
+        ./src/model/model_depth_wrapper.h \
+        ./src/model_builder/xml_reader.h \
+        ./src/model_builder/directory_walker.h \
+        ./src/model_builder/frequency_manager.h \
+        ./src/util/str_util.h \
+        ./src/io/json.h \
+        -o feed_uvl_finding_comparatively -std=c++17 -lstdc++fs
+
+# RUN cmake -S . -B . && make
 
 RUN echo "Result after CMake build: " && ls
 

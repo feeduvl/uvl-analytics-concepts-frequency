@@ -1,6 +1,7 @@
 FROM debian:buster
 
-RUN apt update && apt install -y gcc clang clang-tools cmake python3 cppcheck valgrind && rm -rf /var/lib/apt/lists/*
+RUN apt update && apt install -y gcc clang clang-tools cmake python3 python3-pip && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 COPY requirements.txt requirements.txt

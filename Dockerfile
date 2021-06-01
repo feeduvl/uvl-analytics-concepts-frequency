@@ -1,6 +1,6 @@
-FROM debian:buster
+FROM debian:latest
 
-RUN apt update && apt install -y gcc-9 g++-9 cmake python3 python3-pip && rm -rf /var/lib/apt/lists/*
+RUN apt update && apt install -y build-essential cmake python3 python3-pip && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 

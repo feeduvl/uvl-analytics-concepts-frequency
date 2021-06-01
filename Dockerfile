@@ -26,7 +26,7 @@ RUN g++ -Wall main.cpp \
 
 RUN echo "Result after CMake build: " && ls
 
-RUN apt install python3 python3-pip && rm -rf /var/lib/apt/lists/*
+RUN yes | apt install python3 python3-pip && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt requirements.txt
 RUN pip3 install --upgrade pip -r requirements.txt

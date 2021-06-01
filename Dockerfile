@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y \
   echo 'export PATH=/clang_10.0.0/bin:$PATH' >> ~/.bashrc && \
   echo 'export LD_LIBRARY_PATH=/clang_10.0.0/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
 
-RUN apt-get update -y && sudo apt-get update && sudo apt-get install cmake -y
+RUN apt-get update -y && apt-get update && apt-get install cmake -y
 
 WORKDIR lib
 

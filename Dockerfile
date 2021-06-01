@@ -1,6 +1,6 @@
 FROM debian:buster
 
-RUN apt update && apt install -y gcc clang clang-tools cmake python3 python3-pip && rm -rf /var/lib/apt/lists/*
+RUN apt update && apt install -y gcc-9 g++-9 cmake python3 python3-pip && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 

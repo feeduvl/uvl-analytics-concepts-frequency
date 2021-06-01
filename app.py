@@ -10,6 +10,8 @@ app = Flask(__name__)
 dictConfig({
     'version': 1, 'root': {'level':'INFO'}})
 
+app.logger.info("Server starting now.")
+
 
 @app.route("/hitec/classify/concepts/frequency/", methods=["POST"])
 def post_classification_result():
@@ -28,7 +30,7 @@ def post_classification_result():
 
     app.logger.info("All files: "+stdout_data)
 
-    process = subprocess.Popen(['./lib/feed_uvl_finding_comparatively', "run_algorithm", "2", "algo1", "res/frequencies.txt", content["classify"], "20"],
+    process = subprocess.Popen(['./lib/feed_uvl_finding_comparatively', "test", "2", "algo1", "res/frequencies.txt", content["classify"], "20"],
                                stdout=subprocess.PIPE,
                                universal_newlines=True)
 

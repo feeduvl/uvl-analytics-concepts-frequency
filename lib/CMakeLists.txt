@@ -4,6 +4,7 @@ project(feed_uvl_finding_comparatively)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+add_compile_options(-std=c++17)
 add_compile_options(-lstdc++fs)
 
 include_directories("${CMAKE_SOURCE_DIR}/includes/rapidxml")

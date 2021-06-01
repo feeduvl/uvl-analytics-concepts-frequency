@@ -3,8 +3,8 @@ project(feed_uvl_finding_comparatively)
 
 set(CMAKE_CXX_STANDARD 17)
 
-include_directories(includes/rapidxml)
-include_directories(src)
+include_directories("${CMAKE_SOURCE_DIR}/includes/rapidxml")
+include_directories("${CMAKE_SOURCE_DIR}/src")
 
 add_executable(feed_uvl_finding_comparatively
         main.cpp
@@ -20,4 +20,5 @@ add_executable(feed_uvl_finding_comparatively
         src/model_builder/xml_reader.h
         src/model_builder/directory_walker.h
         src/model_builder/frequency_manager.h
-        src/util/str_util.h src/io/json.h)
+        src/util/str_util.h
+        src/io/json.h)

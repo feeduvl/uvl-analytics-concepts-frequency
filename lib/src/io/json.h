@@ -7,6 +7,8 @@
 #include <string>
 #include <sstream>
 #include <vector>
+
+using namespace std;
 /**
  * Utility class to help build valid json strings
  */

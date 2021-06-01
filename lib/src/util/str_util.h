@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <string>
-#include "../../includes/rapidxml.hpp"
+#include "../../includes/rapidxml/rapidxml.hpp"
 #include "../model/file_accepter.h"
 #include "../model_builder/xml_reader.h"
 #include "../model/algo_1_model.h"

@@ -16,8 +16,8 @@
 #include <chrono>
 #include <algorithm>
 
-#include "src/util/str_util.h"
-#include "src/io/json.h"
+#include "../util/str_util.h"
+#include "../io/json.h"
 
 using namespace std;
 

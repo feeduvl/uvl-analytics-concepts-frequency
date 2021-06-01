@@ -7,7 +7,7 @@
 
 #include <vector>
 #include <string>
-#include "src/graph/concept_node.h"
+#include "../graph/concept_node.h"
 
 /**
  * Provide access to the constituent words of a term within the model's data structure

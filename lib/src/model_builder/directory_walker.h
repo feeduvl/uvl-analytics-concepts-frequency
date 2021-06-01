@@ -10,8 +10,8 @@
 #include <utility>
 #include <vector>
 #include <filesystem>
-#include "includes/rapidxml/rapidxml.hpp"
-#include "src/model/file_accepter.h"
+#include "../../includes/rapidxml/rapidxml.hpp"
+#include "../model/file_accepter.h"
 
 using namespace std;
 

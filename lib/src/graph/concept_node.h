@@ -8,7 +8,7 @@
 #include <vector>
 #include <algorithm>
 #include <string>
-#include "src/model/model.h"
+#include "../model/model.h"
 using namespace std;
 
 /**

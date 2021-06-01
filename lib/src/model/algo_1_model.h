@@ -12,8 +12,8 @@
 #include <algorithm>
 #include <vector>
 
-#include "src/graph/concept_node.h"
-#include "src/model/model.h"
+#include "../graph/concept_node.h"
+#include "../model/model.h"
 #include "../graph/concept_node.h"
 
 using namespace std;

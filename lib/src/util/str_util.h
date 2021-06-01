@@ -7,11 +7,11 @@
 
 #include <iostream>
 #include <string>
-#include "rapidxml.hpp"
-#include "src/model/file_accepter.h"
-#include "src/model_builder/xml_reader.h"
-#include "src/model/algo_1_model.h"
-#include "src/model/model_depth_wrapper.h"
+#include "../../includes/rapidxml.hpp"
+#include "../model/file_accepter.h"
+#include "../model_builder/xml_reader.h"
+#include "../model/algo_1_model.h"
+#include "../model/model_depth_wrapper.h"
 
 class str_util{
 

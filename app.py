@@ -23,7 +23,7 @@ def post_classification_result():
     texts = [doc["text"] + "\n" for doc in content["dataset"]["documents"]]
     texts = "".join(texts)
 
-    process = subprocess.Popen(['./lib/feed_uvl_finding_comparatively', content["params"]["command"], content["params"]["term_length"], "rbai", "res/frequencies.txt", texts, content["max_num_concepts"]],
+    process = subprocess.Popen(['./lib/feed_uvl_finding_comparatively', content["params"]["command"], content["params"]["term_length"], "rbai", "res/frequencies.txt", texts, content["params"]["max_num_concepts"]],
                                stdout=subprocess.PIPE,
                                universal_newlines=True)
 

@@ -20,12 +20,10 @@ def post_classification_result():
     # app.logger.debug(request.data.decode('utf-8'))
     content = json.loads(request.data.decode('utf-8'))
 
-    print("Running topic detection on: "+str(content["dataset"]))
+    texts = [doc["text"] + "\n" for doc in content["dataset"]]
+    texts = "".join(texts)
 
-    for doc in content["dataset"]:
-        print("Doc: "+str(doc))
-
-    process = subprocess.Popen(['./lib/feed_uvl_finding_comparatively', content["command"], content["params"]["term_length"], "rbai", "res/frequencies.txt", content["dataset"], content["max_num_concepts"]],
+    process = subprocess.Popen(['./lib/feed_uvl_finding_comparatively', content["params"]["command"], content["params"]["term_length"], "rbai", "res/frequencies.txt", texts, content["max_num_concepts"]],
                                stdout=subprocess.PIPE,
                                universal_newlines=True)
 

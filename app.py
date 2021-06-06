@@ -8,7 +8,7 @@ with open('./config.json') as config_file:
 app = Flask(__name__)
 
 dictConfig({
-    'version': 1, 'root': {'level':'INFO'}})
+    'version': 1, 'root': {'level':'DEBUG'}})
 
 app.logger.info("Server starting now.")
 
@@ -28,6 +28,8 @@ def post_classification_result():
                                universal_newlines=True)
 
     (stdout_data, stderr_data) = process.communicate()
+
+    app.logger.debug("Program output: "+stdout_data)
 
     r = json.loads(stdout_data)
 

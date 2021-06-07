@@ -9,7 +9,7 @@
 
 using namespace std;
 /**
- * Virtual class to abstract the "process corpus file" step in algo_1_model pretraining/algorithm execution
+ * Virtual class to abstract the "process corpus file" step in frequency_rbai_model pretraining/algorithm execution
  */
 template <class m> class file_accepter{
 public:

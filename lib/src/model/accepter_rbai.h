@@ -2,26 +2,26 @@
 // Created by Jakob Weichselbaumer on 11.05.2021.
 //
 
-#ifndef FEED_UVL_FINDING_COMPARATIVELY_ACCEPTER_ALGO_1_H
-#define FEED_UVL_FINDING_COMPARATIVELY_ACCEPTER_ALGO_1_H
+#ifndef FEED_UVL_FINDING_COMPARATIVELY_ACCEPTER_RBAI_H
+#define FEED_UVL_FINDING_COMPARATIVELY_ACCEPTER_RBAI_H
 #include <iostream>
 #include <string>
 #include "../../includes/rapidxml/rapidxml.hpp"
 #include "../model/file_accepter.h"
 #include "../model_builder/xml_reader.h"
-#include "../model/algo_1_model.h"
+#include "../model/frequency_rbai_model.h"
 #include "../model/model_depth_wrapper.h"
 #include "../util/str_util.h"
 
 using namespace std;
 
-class accepter_algo_1 : public file_accepter<algo_1_model> {
+class accepter_rbai : public file_accepter<frequency_rbai_model> {
 public:
     [[nodiscard]] bool file_is_acceptable(const filesystem::directory_entry & entry) const override {
         return !entry.is_directory() && str_util::hasEnding(entry.path().string(), ".xml");
     }
 
-    static void word_search(xml_node<> * word_container, model_depth_wrapper<algo_1_model> & model){
+    static void word_search(xml_node<> * word_container, model_depth_wrapper<frequency_rbai_model> & model){
         for(xml_node<> * maybe_word_node = word_container->first_node(); maybe_word_node; maybe_word_node = maybe_word_node->next_sibling()){
             if(maybe_word_node->name()==w_container_hi || maybe_word_node->name()==w_container_mw){  // highlighted word or multi-word
                 word_search(maybe_word_node, model);
@@ -76,7 +76,7 @@ public:
         }
     }
 
-    static void recursive_sentence_search(const string& sentence_container_tagname, const xml_node<> * parent_node, model_depth_wrapper<algo_1_model> & model){
+    static void recursive_sentence_search(const string& sentence_container_tagname, const xml_node<> * parent_node, model_depth_wrapper<frequency_rbai_model> & model){
         for(xml_node<> * sentence_container = parent_node->first_node(sentence_container_tagname.c_str()); sentence_container; sentence_container = sentence_container->next_sibling()){
             recursive_sentence_search(s_container_div, sentence_container, model);
             recursive_sentence_search(s_container_head, sentence_container, model);
@@ -92,7 +92,7 @@ public:
         }
     }
 
-    void process_file(const filesystem::directory_entry &entry, const algo_1_model & model) const override {
+    void process_file(const filesystem::directory_entry &entry, const frequency_rbai_model & model) const override {
         string filepath = entry.path().string();
 
         xml_document<> doc;
@@ -134,14 +134,14 @@ public:
 };
 
 
-string accepter_algo_1::s_container_div = "div";
-string accepter_algo_1::s_container_p = "p";
-string accepter_algo_1::s_container_head = "head";
+string accepter_rbai::s_container_div = "div";
+string accepter_rbai::s_container_p = "p";
+string accepter_rbai::s_container_head = "head";
 
-string accepter_algo_1::w_container_hi = "hi";  // highlights
-string accepter_algo_1::w_container_mw = "mw";  // multi-words
-string accepter_algo_1::word_tag = "w";
+string accepter_rbai::w_container_hi = "hi";  // highlights
+string accepter_rbai::w_container_mw = "mw";  // multi-words
+string accepter_rbai::word_tag = "w";
 
-vector<string> accepter_algo_1::allowed_word_tags = {"AJ0", "AJC", "AJS", "AV0", "ITJ", "NN0", "NN1", "NN2",
+vector<string> accepter_rbai::allowed_word_tags = {"AJ0", "AJC", "AJS", "AV0", "ITJ", "NN0", "NN1", "NN2",
                                                            "NP0", "ORD","VM0", "VVB", "VVD", "VVG", "VVI", "VVN", "VVZ", "XX0", "ZZ0" };
-#endif //FEED_UVL_FINDING_COMPARATIVELY_ACCEPTER_ALGO_1_H
+#endif //FEED_UVL_FINDING_COMPARATIVELY_ACCEPTER_RBAI_H

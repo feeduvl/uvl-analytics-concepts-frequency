@@ -7,30 +7,60 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <iomanip>
 
-using namespace std;
 /**
  * Utility class to help build valid json strings
  */
 class json {
-    bool empty = true;
+    bool empty;
     std::stringstream ss;
+
+    std::string escape_json(const std::string &s) {
+        std::ostringstream o;
+        for (auto c = s.cbegin(); c != s.cend(); c++) {
+            switch (*c) {
+                case '"': o << "\\\""; break;
+                case '\\': o << "\\\\"; break;
+                case '\b': o << "\\b"; break;
+                case '\f': o << "\\f"; break;
+                case '\n': o << "\\n"; break;
+                case '\r': o << "\\r"; break;
+                case '\t': o << "\\t"; break;
+                default:
+                    if ('\x00' <= *c && *c <= '\x1f') {
+                        o << "\\u"
+                          << std::hex << std::setw(4) << std::setfill('0') << (int)*c;
+                    } else {
+                        o << *c;
+                    }
+            }
+        }
+        return o.str();
+    }
+
 public:
     json(){
         ss << '{' << ' ' << '\n';
+        empty = true;
     }
 
-    template <class T> void add_attr(const string& name, T obj){
+    template <class T> void add_attr(const std::string& name, T obj, bool quotes){
+        using namespace std;
         if(!empty){
             ss << ',';
         }
 
-        ss << '\"' << name << '\"' << ':' << '\"' << obj << '\"' << '\n';
+        std::ostringstream oss {};
+        oss << obj;
+        std::string s = oss.str();
+
+        ss << '\"' << name << (quotes?"\"":"") << ':' << '\"' << escape_json(s) << (quotes?"\"":"") << '\n';
         empty = false;
     }
 
 
-    void add_list(const string& name, vector<double > & list){
+    void add_list(const std::string& name, std::vector<double > & list){
         if(!empty){
             ss << ',';
         }
@@ -44,7 +74,7 @@ public:
         ss << ']' << '\n';
         empty = false;
     }
-    void add_list(const string& name, vector<string> & list){
+    void add_list(const std::string& name, std::vector<std::string> & list){
         if(!empty){
             ss << ',';
         }
@@ -59,7 +89,7 @@ public:
         empty = false;
     }
 
-    string get_string(){
+    std::string get_string(){
         ss << ' ' << '}';
         return ss.str();
     }

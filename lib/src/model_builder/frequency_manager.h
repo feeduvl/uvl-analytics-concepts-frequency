@@ -366,13 +366,12 @@ public:
         //cout << "Most likely "<<return_num_concepts<< " words: " << endl;
 
         json j = json();
-        j.add_attr("filename", analyze_file);
         auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::system_clock::now().time_since_epoch()
         );
-        j.add_attr("timestamp", ms.count());
-        j.add_attr("algo_name", "algo_1");
-        j.add_attr("concept_length", model_wrapper.m.getTermLength());
+        j.add_attr("timestamp", ms.count(), false);
+        j.add_attr("algo_name", "frequency_rbai", true);
+        j.add_attr("concept_length", model_wrapper.m.getTermLength(), false);
 
         vector<size_t> ranking = sort_indexes(log_likelihoods_input);
         vector<string> sorted_tokens;

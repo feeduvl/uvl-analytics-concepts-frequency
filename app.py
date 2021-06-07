@@ -31,11 +31,7 @@ def post_classification_result():
 
     app.logger.debug("Program output: "+stdout_data)
 
-    r = json.loads(stdout_data)
-
-    app.logger.info("Returning result: "+str(r))
-
-    return jsonify(r), 200
+    return stdout_data, 200
 
 
 @app.route("/hitec/classify/concepts/frequency-rbai/status", methods=["GET"])

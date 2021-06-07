@@ -15,8 +15,8 @@ add_executable(feed_uvl_finding_comparatively
 
         src/graph/concept_node.h
 
-        src/model/accepter_algo_1.h
-        src/model/algo_1_model.h
+        src/model/accepter_rbai.h
+        src/model/frequency_rbai_model.h
         src/model/file_accepter.h
         src/model/model.h
         src/model/model_depth_wrapper.h

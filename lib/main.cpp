@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "src/model/model.h"
-#include "src/model/accepter_algo_1.h"
+#include "src/model/accepter_rbai.h"
 #include "src/model_builder/directory_walker.h"
 #include "src/model_builder/frequency_manager.h"
 using namespace std;
@@ -19,13 +19,13 @@ int main(int argc, char** argv) {
 
     if(command == "test"){
         json j = json();
-        j.add_attr("filename", "testing_no_filename");
+        j.add_attr("filename", "testing_no_filename", true);
         auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::system_clock::now().time_since_epoch()
         );
-        j.add_attr("timestamp", ms.count());
-        j.add_attr("algo_name", "test");
-        j.add_attr("concept_length", "-1");
+        j.add_attr("timestamp", ms.count(), false);
+        j.add_attr("algo_name", "test", true);
+        j.add_attr("concept_length", "-1", false);
 
         auto sorted_tokens = vector<string>();
         auto scores = vector<double>();
@@ -35,11 +35,11 @@ int main(int argc, char** argv) {
     }
     else if(command == "train_frequencies"){
         string concept_length = argv[2];
-        // build our algo_1_model here using the algorithm of the next argument with the files in the directory given by the following argument
-        accepter_algo_1 accepterAlgo1 = accepter_algo_1();
-        algo_1_model m = algo_1_model();
+        // build our frequency_rbai_model here using the algorithm of the next argument with the files in the directory given by the following argument
+        accepter_rbai accepterAlgo1 = accepter_rbai();
+        frequency_rbai_model m = frequency_rbai_model();
         m.setTermLength(stoi(concept_length));
-        directory_walker walker = directory_walker<algo_1_model>(argv[4], accepterAlgo1, m);
+        directory_walker walker = directory_walker<frequency_rbai_model>(argv[4], accepterAlgo1, m);
         m.write_concepts_to_file("res/frequencies.txt");
         //.write_omitted_words_to_file("stopwords.txt");
 
@@ -53,9 +53,9 @@ int main(int argc, char** argv) {
         string stopwords_file = "res/stopwords.txt";
         int return_num_concepts = stoi(argv[6]);
 
-        algo_1_model m = algo_1_model();
+        frequency_rbai_model m = frequency_rbai_model();
         m.setTermLength((unsigned int) stoi(concept_length));
-        frequency_manager<algo_1_model> manager = frequency_manager<algo_1_model>(m);
+        frequency_manager<frequency_rbai_model> manager = frequency_manager<frequency_rbai_model>(m);
 
         manager.read_corpus_frequencies_file(corpus_frequencies);
         manager.read_lemmatization_map(lemmatization_filename);

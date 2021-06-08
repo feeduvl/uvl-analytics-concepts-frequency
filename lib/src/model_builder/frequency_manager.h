@@ -369,9 +369,10 @@ public:
         auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::system_clock::now().time_since_epoch()
         );
+        /*
         j.add_attr("started_at", ms.count(), false);
         j.add_attr("method", "frequency_rbai", true);
-
+        */
         vector<size_t> ranking = sort_indexes(log_likelihoods_input);
         vector<string> sorted_tokens;
         vector<double> scores;

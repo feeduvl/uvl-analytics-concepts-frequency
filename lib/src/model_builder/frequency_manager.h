@@ -90,7 +90,7 @@ private:
                 c = ::tolower(c);
             });
 
-            if(str_util::hasEnding(token, "'s")){
+            if(str_util::hasEnding(token, "'s") || str_util::hasEnding(token, "’s")){
                 token = token.substr(0, token.size()-2);
                 //cout << "Stripped possessive apostrophe: 's, yielding word: " << token << endl;
             }
@@ -116,7 +116,7 @@ private:
                     tokens.push_back(token);
                 }
             } else {
-                cerr << "Got stop word: " << token << endl;
+                cerr << "Stopword in input: " << token << endl;
             }
 
             value = value.substr(delimeterIndex + 1);
@@ -220,6 +220,7 @@ public:
         //cout << "Total words read into model: " << this->total_words_corpus << endl;
         //cout << "Distinct tokens: " << this->distinct_tokens_corpus << endl;
         //cout << "Number of concepts: " << this->total_concepts_corpus << endl;
+        unsigned int lines_read = 0;
         while (getline (readFile, line)) {
             if(line.empty()){  // last line
                 break;
@@ -237,12 +238,17 @@ public:
             string c = line.substr(skip, frequency_pos-1 -skip );
             corpus_frequencies.push_back(frequency);
             corpus_concepts_sorted.push_back(c);
+            lines_read++;
         }
         readFile.close();
         //print_contents();
 
-        string n = "not";
-        cerr << "Concept frequency of 'not' (== '" << corpus_concepts_sorted[get_index_in_corpus(n)] << "') : " << to_string(corpus_frequencies[get_index_in_corpus(n)]) << endl;
+        if(lines_read > 0){
+            string n = "not";
+            cerr << "Concept frequency of 'not' (== '" << corpus_concepts_sorted[get_index_in_corpus(n)] << "') : " << to_string(corpus_frequencies[get_index_in_corpus(n)]) << endl;
+        } else {
+            cerr << "Got empty frequencies file!" << endl;
+        }
     }
 
     void read_lemmatization_map(string & lemmatization_filename){
@@ -354,14 +360,14 @@ public:
         for(int i = 0; i < input_frequencies.size(); i++){
             double w_d = input_frequencies[i];
             double w_c = position_mapping_input_to_corpus[i] == -1 ? 0: corpus_frequencies[position_mapping_input_to_corpus[i]];
-            cerr << "Computing ll for word: " << input_concepts_sorted[i] << endl;
+            //cerr << "Computing ll for word: " << input_concepts_sorted[i] << endl;
 
             double ll = compute_log_likelihood(w_d,
                                                w_c,
                                                (double)model_wrapper.m.total_words_into_model,
                                                (double)total_words_corpus);
 
-            cerr << "Result: " << ll << endl;
+            //cerr << "Result: " << ll << endl;
 
             log_likelihoods_input.push_back(ll);
         }

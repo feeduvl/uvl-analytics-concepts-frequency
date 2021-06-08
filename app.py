@@ -20,19 +20,18 @@ def post_classification_result():
     # app.logger.debug(request.data.decode('utf-8'))
     content = json.loads(request.data.decode('utf-8'))
 
-    texts = [doc["text"] + "\n" for doc in content["dataset"]["documents"]]
+    texts = [doc["text"].de + "\n" for doc in content["dataset"]["documents"]]
     texts = "".join(texts)
 
-    process = subprocess.Popen(['./lib/feed_uvl_finding_comparatively', content["params"]["command"], content["params"]["term_length"], "rbai", "res/frequencies.txt", texts, content["params"]["max_num_concepts"]],
-                               stdout=subprocess.PIPE,
-                               universal_newlines=True,
-                               encoding="utf-8")
+    with subprocess.Popen(['./lib/feed_uvl_finding_comparatively', content["params"]["command"], content["params"]["term_length"], "rbai", "res/frequencies.txt", texts, content["params"]["max_num_concepts"]],
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE) as p:
+        output, errors = p.communicate()
+        output = output.decode("utf-8")
 
-    (stdout_data, stderr_data) = process.communicate()
+    app.logger.debug("Program output: "+output)
 
-    app.logger.debug("Program output: "+stdout_data)
-
-    return stdout_data, 200
+    return output, 200
 
 
 @app.route("/hitec/classify/concepts/frequency-rbai/status", methods=["GET"])

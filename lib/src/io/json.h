@@ -55,7 +55,7 @@ public:
         oss << obj;
         std::string s = oss.str();
 
-        ss << '\"' << name << (quotes?"\"":"") << ':' << '\"' << escape_json(s) << (quotes?"\"":"") << '\n';
+        ss << '\"' << name << '\"' <<  ':' << (quotes?"\"":"") << escape_json(s) << (quotes?"\"":"") << '\n';
         empty = false;
     }
 

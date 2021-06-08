@@ -116,7 +116,7 @@ private:
                     tokens.push_back(token);
                 }
             } else {
-                //cout << "Got stop word: " << token << endl;
+                cerr << "Got stop word: " << token << endl;
             }
 
             value = value.substr(delimeterIndex + 1);
@@ -241,8 +241,8 @@ public:
         readFile.close();
         //print_contents();
 
-        //string n = "not";
-        //cout << "Concept frequency of 'not' (== '" << corpus_concepts_sorted[get_index_in_corpus(n)] << "') : " << to_string(corpus_frequencies[get_index_in_corpus(n)]) << endl;
+        string n = "not";
+        cerr << "Concept frequency of 'not' (== '" << corpus_concepts_sorted[get_index_in_corpus(n)] << "') : " << to_string(corpus_frequencies[get_index_in_corpus(n)]) << endl;
     }
 
     void read_lemmatization_map(string & lemmatization_filename){
@@ -259,20 +259,22 @@ public:
             string variant = line.substr(space_at+1, line.length());
             lemma_map[variant] = base;
         }
-        //cout << "Lemma of 'notations': " << (*lemma_map.find("notations")).second<< endl;
+        cerr << "Lemma of 'notations': " << (*lemma_map.find("notations")).second<< endl;
     }
 
     void read_stopwords(string & stopwords_filename){
         this->stopwords_filename = stopwords_filename;
 
-        //cout << "Reading stopwords file: " << this->stopwords_filename << endl;
+        cerr << "Reading stopwords file: " << this->stopwords_filename << endl;
         ifstream readFile(this->stopwords_filename);
         string word;
         while (getline (readFile, word)) {
             if(word.empty()){ // last line
                 break;
             }
-
+            if(word == "your"){
+                cerr << "Got stopword 'your'" << endl;
+            }
             const auto it = lower_bound(stopwords_sorted.begin(), stopwords_sorted.end(), word);
             if(it == stopwords_sorted.end()){
                 stopwords_sorted.push_back(word);
@@ -284,7 +286,6 @@ public:
         }
     }
 
-    //  we assume that at the beginning, log_likelihoods_input contains w_d + w_c at every position
     double compute_log_likelihood(double w_d, double w_c, double n_d, double n_c){
 
         double E_d, E_c;
@@ -353,12 +354,14 @@ public:
         for(int i = 0; i < input_frequencies.size(); i++){
             double w_d = input_frequencies[i];
             double w_c = position_mapping_input_to_corpus[i] == -1 ? 0: corpus_frequencies[position_mapping_input_to_corpus[i]];
-            //cout << "Computing ll for word: " << input_concepts_sorted[i] << endl;
+            cerr << "Computing ll for word: " << input_concepts_sorted[i] << endl;
 
             double ll = compute_log_likelihood(w_d,
                                                w_c,
                                                (double)model_wrapper.m.total_words_into_model,
                                                (double)total_words_corpus);
+
+            cerr << "Result: " << ll << endl;
 
             log_likelihoods_input.push_back(ll);
         }
@@ -366,10 +369,10 @@ public:
         //cout << "Most likely "<<return_num_concepts<< " words: " << endl;
 
         json j = json();
-        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
-                std::chrono::system_clock::now().time_since_epoch()
-        );
+
         /*
+        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::system_clock::now().time_since_epoch());
         j.add_attr("started_at", ms.count(), false);
         j.add_attr("method", "frequency_rbai", true);
         */

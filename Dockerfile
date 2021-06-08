@@ -1,4 +1,4 @@
-FROM debian:latest
+FROM python:3.8-slim-buster
 
 RUN apt update && apt install -y build-essential cmake
 RUN gcc --version
@@ -26,7 +26,7 @@ RUN g++ -Wall main.cpp \
 
 RUN echo "Result after CMake build: " && ls
 
-RUN yes | apt install python3 python3-pip && rm -rf /var/lib/apt/lists/*
+#RUN yes | apt install python3 python3-pip && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt requirements.txt
 RUN pip3 install --upgrade pip -r requirements.txt

@@ -369,20 +369,24 @@ public:
         auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::system_clock::now().time_since_epoch()
         );
-        j.add_attr("timestamp", ms.count(), false);
-        j.add_attr("algo_name", "frequency_rbai", true);
-        j.add_attr("concept_length", model_wrapper.m.getTermLength(), false);
+        j.add_attr("started_at", ms.count(), false);
+        j.add_attr("method", "frequency_rbai", true);
 
         vector<size_t> ranking = sort_indexes(log_likelihoods_input);
         vector<string> sorted_tokens;
         vector<double> scores;
 
+        json topics = json();
+
         for(int i = 0; i < min(return_num_concepts, (int) ranking.size()); ++i){
             sorted_tokens.push_back(input_concepts_sorted[ranking[ranking.size()-1-i]]);
             scores.push_back(log_likelihoods_input[ranking[ranking.size()-1-i]]);
         }
-        j.add_list("concepts", sorted_tokens);
-        j.add_list("scores", scores);
+        topics.add_list("concepts", sorted_tokens);
+        topics.add_list("scores", scores);
+
+        j.add_attr("topics", topics.get_string(), false);
+
         return j;
     }
 

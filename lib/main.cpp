@@ -52,6 +52,7 @@ int main(int argc, char** argv) {
         string analyze_text = argv[5];
         string stopwords_file = "res/stopwords.txt";
         int return_num_concepts = stoi(argv[6]);
+        string dataset_name = argv[7];
 
         frequency_rbai_model m = frequency_rbai_model();
         m.setTermLength((unsigned int) stoi(concept_length));
@@ -62,6 +63,13 @@ int main(int argc, char** argv) {
         manager.read_stopwords(stopwords_file);
 
         json algo_return = manager.run_algo(analyze_text, return_num_concepts, false);
+
+        json params = json();
+        params.add_attr("term_length", concept_length, false);
+        params.add_attr("max_num_concepts", return_num_concepts, false);
+        algo_return.add_attr("params", params.get_string(), false);
+        algo_return.add_attr("dataset_name", dataset_name, true);
+
         cout << algo_return.get_string() << endl;
 
     }

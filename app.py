@@ -26,13 +26,12 @@ def post_classification_result():
 
     app.logger.debug("Processing: "+texts)
     args = ['./lib/feed_uvl_finding_comparatively', content["params"]["command"], content["params"]["term_length"], "rbai", "res/frequencies.txt", texts, content["params"]["max_num_concepts"]]
-    with subprocess.Popen([a.encode("utf-8") for a in args],
+    output = subprocess.run(args,
                             stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE) as p:
-        
-        output, errors = p.communicate()
-        output = output.decode("utf-8")
+                            stderr=subprocess.PIPE,
+                            capture_output=True)
 
+    output = output.stdout.decode("utf-8", errors="ignore")
     app.logger.debug("Program output: "+output)
 
     return output, 200

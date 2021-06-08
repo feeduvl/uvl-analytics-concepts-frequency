@@ -20,7 +20,7 @@ def post_classification_result():
     # app.logger.debug(request.data.decode('utf-8'))
     content = json.loads(request.data.decode('utf-8'))
 
-    texts = [doc["text"].de + "\n" for doc in content["dataset"]["documents"]]
+    texts = [doc["text"] + "\n" for doc in content["dataset"]["documents"]]
     texts = "".join(texts)
 
     with subprocess.Popen(['./lib/feed_uvl_finding_comparatively', content["params"]["command"], content["params"]["term_length"], "rbai", "res/frequencies.txt", texts, content["params"]["max_num_concepts"]],

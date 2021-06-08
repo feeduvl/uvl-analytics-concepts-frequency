@@ -25,7 +25,8 @@ def post_classification_result():
 
     process = subprocess.Popen(['./lib/feed_uvl_finding_comparatively', content["params"]["command"], content["params"]["term_length"], "rbai", "res/frequencies.txt", texts, content["params"]["max_num_concepts"]],
                                stdout=subprocess.PIPE,
-                               universal_newlines=True)
+                               universal_newlines=True,
+                               encoding="utf-8")
 
     (stdout_data, stderr_data) = process.communicate()
 

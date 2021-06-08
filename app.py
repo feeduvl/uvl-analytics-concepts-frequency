@@ -22,11 +22,14 @@ def post_classification_result():
 
     texts = [doc["text"] + "\n" for doc in content["dataset"]["documents"]]
     texts = "".join(texts)
-    texts = texts.encode("utf-8")
+    texts = texts
 
-    with subprocess.Popen(['./lib/feed_uvl_finding_comparatively', content["params"]["command"], content["params"]["term_length"], "rbai", "res/frequencies.txt", texts, content["params"]["max_num_concepts"]],
+    app.logger.debug("Processing: "+texts)
+    args = ['./lib/feed_uvl_finding_comparatively', content["params"]["command"], content["params"]["term_length"], "rbai", "res/frequencies.txt", texts, content["params"]["max_num_concepts"]]
+    with subprocess.Popen([a.encode("utf-8") for a in args],
                             stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE) as p:
+        
         output, errors = p.communicate()
         output = output.decode("utf-8")
 

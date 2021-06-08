@@ -116,7 +116,7 @@ private:
                     tokens.push_back(token);
                 }
             } else {
-                cerr << "Stopword in input: " << token << endl;
+                cerr << "Stopword in input: '" << token << '\'' <<endl;
             }
 
             value = value.substr(delimeterIndex + 1);

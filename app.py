@@ -1,5 +1,5 @@
 import subprocess
-from flask import Flask, json, jsonify, logging, request
+from flask import Flask, json, jsonify, request
 from logging.config import dictConfig
 
 with open('./config.json') as config_file:
@@ -27,15 +27,13 @@ def post_classification_result():
     app.logger.debug("Processing: "+texts)
     args = ['./lib/feed_uvl_finding_comparatively', content["params"]["command"], content["params"]["term_length"], "rbai", "./res/frequencies.txt", texts, content["params"]["max_num_concepts"]]
     output = subprocess.run(args,
-                            capture_output=True,
-                            text=True)
+                            capture_output=True)
 
-    #o = output.stdout.decode("utf-8", errors="ignore")
-    #errors = output.stderr.decode("utf-8", errors="ignore")
-    errors = output.stderr
-    app.logger.debug("Program output: "+output.stdout)
+    o = output.stdout.decode("utf-8", errors="ignore")
+    errors = output.stderr.decode("utf-8", errors="ignore")
+    app.logger.debug("Program output: " + o)
     if errors is not None and errors != "":
-        app.logger.error("Program errors: "+errors)
+        app.logger.error("Program errors: " + errors)
 
     return output, 200
 

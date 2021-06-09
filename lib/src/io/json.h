@@ -41,7 +41,7 @@ class json {
 
 public:
     json(){
-        ss << '{' << ' ' << '\n';
+        ss << '{' << ' ' ;
         empty = true;
     }
 
@@ -55,7 +55,7 @@ public:
         oss << obj;
         std::string s = oss.str();
 
-        ss << '\"' << name << '\"' <<  ':' << (quotes?"\"":"") << escape_json(s) << (quotes?"\"":"") << '\n';
+        ss << "\"" << name << "\"" <<  ':' << (quotes?"\"":"") << escape_json(s) << (quotes?"\"":"") ;
         empty = false;
     }
 
@@ -64,28 +64,28 @@ public:
         if(!empty){
             ss << ',';
         }
-        ss << '\"' << name << '\"' << ':' << '[' << '\n';
+        ss << "\"" << name << "\"" << ':' << '[' ;
         if(!list.empty()){
             for(int i = 0; i < list.size() -1; i++){
-                ss << list[i] << ',' << '\n';
+                ss << list[i] << ',' ;
             }
-            ss <<  list[list.size()-1]   << '\n';
+            ss <<  list[list.size()-1]   ;
         }
-        ss << ']' << '\n';
+        ss << ']' ;
         empty = false;
     }
     void add_list(const std::string& name, std::vector<std::string> & list){
         if(!empty){
             ss << ',';
         }
-        ss << '\"' << name << '\"' << ':' << '[' << '\n';
+        ss << "\"" << name << "\"" << ':' << '[' ;
         if(!list.empty()){
             for(int i = 0; i < list.size() -1; i++){
-                ss << '\"' << list[i] << '\"' << ',' << '\n';
+                ss << "\"" << list[i] << "\"" << ',' ;
             }
-            ss << '\"'  << list[list.size()-1] << '\"'  << '\n';
+            ss << "\""  << list[list.size()-1] << "\""  ;
         }
-        ss << ']' << '\n';
+        ss << ']' ;
         empty = false;
     }
 

@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 
+#include "src/io/json.h"
 #include "src/model/model.h"
 #include "src/model/accepter_rbai.h"
 #include "src/model_builder/directory_walker.h"
@@ -18,20 +19,7 @@ int main(int argc, char** argv) {
     //cout << "Concept length: " << concept_length << endl;
 
     if(command == "test"){
-        json j = json();
-        j.add_attr("filename", "testing_no_filename", true);
-        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
-                std::chrono::system_clock::now().time_since_epoch()
-        );
-        j.add_attr("timestamp", ms.count(), false);
-        j.add_attr("algo_name", "test", true);
-        j.add_attr("concept_length", "-1", false);
-
-        auto sorted_tokens = vector<string>();
-        auto scores = vector<double>();
-        j.add_list("concepts", sorted_tokens);
-        j.add_list("scores", scores);
-        cout << j.get_string() << endl;
+        cout << R"({"topics":"Test successful."})" << endl;
     }
     else if(command == "train_frequencies"){
         string concept_length = argv[2];
@@ -63,7 +51,7 @@ int main(int argc, char** argv) {
         manager.read_lemmatization_map(lemmatization_file);
         manager.read_stopwords(stopwords_file);
 
-        json algo_return = manager.run_algo(analyze_text, return_num_concepts, false);
+        json::JSON algo_return = manager.run_algo(analyze_text, return_num_concepts, false);
 
         /*
         json params = json();
@@ -71,7 +59,7 @@ int main(int argc, char** argv) {
         params.add_attr("max_num_concepts", return_num_concepts, false);
         algo_return.add_attr("params", params.get_string(), false);
         */
-        cout << algo_return.get_string() << endl;
+        cout << algo_return << endl;
 
     }
 

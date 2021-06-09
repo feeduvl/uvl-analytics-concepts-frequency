@@ -322,7 +322,7 @@ public:
         }
     }
 
-    json run_algo(string & analyze_file, int & return_num_concepts, bool from_file){
+    json::JSON run_algo(string & analyze_file, int & return_num_concepts, bool from_file){
 
         //cout << "Analyzing file: " << analyze_file << endl;
 
@@ -380,7 +380,7 @@ public:
 
         //cout << "Most likely "<<return_num_concepts<< " words: " << endl;
 
-        json j = json();
+        json::JSON j;
 
         /*
         auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -392,17 +392,14 @@ public:
         vector<string> sorted_tokens;
         vector<double> scores;
 
-        json topics = json();
+        j["topics"] = json::Object();
+        j["topics"]["concepts"] = json::Array();
+        j["topics"]["scores"] = json::Array();
 
         for(int i = 0; i < min(return_num_concepts, (int) ranking.size()); ++i){
-            sorted_tokens.push_back(input_concepts_sorted[ranking[ranking.size()-1-i]]);
-            scores.push_back(log_likelihoods_input[ranking[ranking.size()-1-i]]);
+            j["topics"]["concepts"][i] = input_concepts_sorted[ranking[ranking.size()-1-i]];
+            j["topics"]["scores"][i] = log_likelihoods_input[ranking[ranking.size()-1-i]];
         }
-        topics.add_list("concepts", sorted_tokens);
-        topics.add_list("scores", scores);
-
-        j.add_attr("topics", topics.get_string(), false);
-
         return j;
     }
 

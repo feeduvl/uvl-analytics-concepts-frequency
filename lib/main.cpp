@@ -47,18 +47,20 @@ int main(int argc, char** argv) {
         string concept_length = argv[2];
         //  run the algorithm as defined by the following arguments
         string algo_name = argv[3];
-        string corpus_frequencies = argv[4];
-        string lemmatization_filename = "res/lemmatization-en.txt";
-        string analyze_text = argv[5];
-        string stopwords_file = "res/stopwords.txt";
-        int return_num_concepts = stoi(argv[6]);
+
+        string corpus_frequencies_file = argv[4];
+        string stopwords_file = argv[5];
+        string lemmatization_file = argv[6];
+
+        string analyze_text = argv[7];
+        int return_num_concepts = stoi(argv[8]);
 
         frequency_rbai_model m = frequency_rbai_model();
         m.setTermLength((unsigned int) stoi(concept_length));
         frequency_manager<frequency_rbai_model> manager = frequency_manager<frequency_rbai_model>(m);
 
-        manager.read_corpus_frequencies_file(corpus_frequencies);
-        manager.read_lemmatization_map(lemmatization_filename);
+        manager.read_corpus_frequencies_file(corpus_frequencies_file);
+        manager.read_lemmatization_map(lemmatization_file);
         manager.read_stopwords(stopwords_file);
 
         json algo_return = manager.run_algo(analyze_text, return_num_concepts, false);

@@ -25,7 +25,15 @@ def post_classification_result():
     texts = texts
 
     app.logger.debug("Processing: "+texts)
-    args = ['./lib/feed_uvl_finding_comparatively', content["params"]["command"], content["params"]["term_length"], "rbai", "./res/frequencies.txt", texts, content["params"]["max_num_concepts"]]
+    args = ['./lib/feed_uvl_finding_comparatively',
+            content["params"]["command"],
+            content["params"]["term_length"],
+            "rbai",
+            "app/lib/res/frequencies.txt",
+            "app/lib/res/stopwords.txt",
+            "app/lib/res/lemmatization-en.txt",
+            texts,
+            content["params"]["max_num_concepts"]]
     output = subprocess.run(args,
                             capture_output=True)
 

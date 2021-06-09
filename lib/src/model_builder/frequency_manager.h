@@ -244,8 +244,8 @@ public:
         //print_contents();
 
         if(lines_read > 0){
-            string n = "not";
-            cerr << "Concept frequency of 'not' (== '" << corpus_concepts_sorted[get_index_in_corpus(n)] << "') : " << to_string(corpus_frequencies[get_index_in_corpus(n)]) << endl;
+            //string n = "not";
+            //cerr << "Concept frequency of 'not' (== '" << corpus_concepts_sorted[get_index_in_corpus(n)] << "') : " << to_string(corpus_frequencies[get_index_in_corpus(n)]) << endl;
         } else {
             cerr << "Got empty frequencies file!" << endl;
         }
@@ -256,6 +256,7 @@ public:
         //cout << "Reading lemmatization file: " << lemmatization_filename << endl;
         ifstream readFile(this->lemmatization_filename);
         string line;
+        unsigned int lines_read = 0;
         while (getline (readFile, line)) {
             if(line.empty()){ // last line
                 break;
@@ -264,22 +265,23 @@ public:
             string base = line.substr(0, space_at);
             string variant = line.substr(space_at+1, line.length());
             lemma_map[variant] = base;
+            lines_read++;
         }
-        cerr << "Lemma of 'notations': " << (*lemma_map.find("notations")).second<< endl;
+        if(lines_read==0){
+            cerr << "Got empty lemmatization file!" << endl;
+        }
+        //cerr << "Lemma of 'notations': " << (*lemma_map.find("notations")).second<< endl;
     }
 
     void read_stopwords(string & stopwords_filename){
         this->stopwords_filename = stopwords_filename;
 
-        cerr << "Reading stopwords file: " << this->stopwords_filename << endl;
         ifstream readFile(this->stopwords_filename);
         string word;
+        unsigned int lines_read = 0;
         while (getline (readFile, word)) {
             if(word.empty()){ // last line
                 break;
-            }
-            if(word == "your"){
-                cerr << "Got stopword 'your'" << endl;
             }
             const auto it = lower_bound(stopwords_sorted.begin(), stopwords_sorted.end(), word);
             if(it == stopwords_sorted.end()){
@@ -289,6 +291,10 @@ public:
                     stopwords_sorted.insert(it, word);
                 }
             }
+            lines_read++;
+        }
+        if(lines_read==0){
+            cerr << "Got empty stopwords file!" << endl;
         }
     }
 

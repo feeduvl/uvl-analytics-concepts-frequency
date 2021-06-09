@@ -29,9 +29,9 @@ def post_classification_result():
             content["params"]["command"],
             content["params"]["term_length"],
             "rbai",
-            "app/lib/res/frequencies.txt",
-            "app/lib/res/stopwords.txt",
-            "app/lib/res/lemmatization-en.txt",
+            "/app/lib/res/frequencies.txt",
+            "/app/lib/res/stopwords.txt",
+            "/app/lib/res/lemmatization-en.txt",
             texts,
             content["params"]["max_num_concepts"]]
     output = subprocess.run(args,
@@ -43,7 +43,7 @@ def post_classification_result():
     if errors is not None and errors != "":
         app.logger.error("Program errors: " + errors)
 
-    return output, 200
+    return o, 200
 
 
 @app.route("/hitec/classify/concepts/frequency-rbai/status", methods=["GET"])

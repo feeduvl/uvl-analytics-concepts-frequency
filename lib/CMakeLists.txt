@@ -15,8 +15,8 @@ add_executable(feed_uvl_finding_comparatively
 
         src/graph/concept_node.h
 
-        src/model/accepter_rbai.h
-        src/model/frequency_rbai_model.h
+        src/model/frequency_accepter.h
+        src/model/frequency_model.h
         src/model/file_accepter.h
         src/model/model.h
         src/model/model_depth_wrapper.h
@@ -25,6 +25,6 @@ add_executable(feed_uvl_finding_comparatively
         src/model_builder/directory_walker.h
         src/model_builder/frequency_manager.h
         src/util/str_util.h
-        src/io/json.h)
+        src/io/json.h src/dtree/DT.cpp)
 
 target_compile_features(feed_uvl_finding_comparatively PRIVATE cxx_std_17)

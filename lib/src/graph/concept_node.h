@@ -18,6 +18,8 @@ template <class T> struct concept_node{
     int depth{};
     T * key;
 
+    size_t corpus_index;  // convenience attribute used later
+
     mutable unsigned int concept_frequency{};
     vector<concept_node<T> *> children = vector<concept_node*>();
 
@@ -37,15 +39,17 @@ template <class T> struct concept_node{
 
     /**
      * This should be called on the root node
+     * @param terms should be in reversed order
      * @return nullptr if concept not found, else the concept's leaf node
      */
-     /*
+
     concept_node * get_node(vector<T> & terms){
         T & word = terms[terms.size() - 1];
-        auto * ret_node = new concept_node<T>(child_p, this->depth + 1);
+        concept_node<T> * ret_node = new concept_node<T>(&(*(terms.begin()+(terms.size()-1))), this->depth + 1);
         const auto it = lower_bound(children.begin(), children.end(), ret_node, [](concept_node<T>*a, concept_node<T>*b){return a->getKey() < b->getKey();});
         delete ret_node;
-        if(it == children.end() || **it->getKey()!=word){
+
+        if(it == children.end() || (*it)->getKey()!=word){
             return nullptr;  // word not found
         }
         if(terms.size()==1){
@@ -54,7 +58,7 @@ template <class T> struct concept_node{
             terms.pop_back();
             return get_node(terms);
         }
-    }*/
+    }
 
     /**
      * @param child key for the new child
@@ -77,6 +81,7 @@ template <class T> struct concept_node{
                 delete ret_node;
                 node->incrementFrequency();
                 //cout << "Incremented frequency of concept: "<< child << " at depth " <<depth+1 << endl;
+                m.frequency_updates++;
                 int index = (it - children.begin());
                 //cout << "New frequency: " << node->concept_frequency << endl;
                 ret_node = node;

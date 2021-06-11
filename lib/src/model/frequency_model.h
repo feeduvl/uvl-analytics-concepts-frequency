@@ -2,8 +2,8 @@
 // Created by Jakob Weichselbaumer on 11.05.2021.
 //
 
-#ifndef FEED_UVL_FINDING_COMPARATIVELY_FREQUENCY_RBAI_MODEL_H
-#define FEED_UVL_FINDING_COMPARATIVELY_FREQUENCY_RBAI_MODEL_H
+#ifndef FEED_UVL_FINDING_COMPARATIVELY_FREQUENCY_MODEL_H
+#define FEED_UVL_FINDING_COMPARATIVELY_FREQUENCY_MODEL_H
 
 #include <iostream>
 #include <fstream>
@@ -18,7 +18,7 @@
 
 using namespace std;
 
-class frequency_rbai_model : public model<string> {
+class frequency_model : public model<string> {
 
     mutable vector<string> omitted_words = vector<string>();
 
@@ -46,12 +46,17 @@ class frequency_rbai_model : public model<string> {
     }
 
 public:
+
+    frequency_model(unsigned int t_l) : model(t_l){
+
+    }
+
     [[nodiscard]] concept_node<string> * getRootNode() const {
         return root_node;
     }
 
     /**
-     * Print out all corpus_concepts_sorted gathered in the frequency_rbai_model
+     * Print out all corpus_concepts_sorted gathered in the frequency_model
      */
     void recurse_print_concepts() const{
         recurse_print_concepts(root_node, "");
@@ -87,4 +92,4 @@ public:
 };
 
 
-#endif //FEED_UVL_FINDING_COMPARATIVELY_FREQUENCY_RBAI_MODEL_H
+#endif //FEED_UVL_FINDING_COMPARATIVELY_FREQUENCY_MODEL_H

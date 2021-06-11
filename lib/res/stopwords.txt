@@ -106,7 +106,6 @@ few
 more
 most
 other
-some
 such
 no
 nor
@@ -150,3 +149,4 @@ some
 upon
 whether
 albeit
+something

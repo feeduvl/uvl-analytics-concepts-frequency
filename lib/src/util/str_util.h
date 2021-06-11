@@ -10,7 +10,7 @@
 #include "../../includes/rapidxml/rapidxml.hpp"
 #include "../model/file_accepter.h"
 #include "../model_builder/xml_reader.h"
-#include "../model/frequency_rbai_model.h"
+#include "../model/frequency_model.h"
 #include "../model/model_depth_wrapper.h"
 
 class str_util{

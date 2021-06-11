@@ -2,26 +2,26 @@
 // Created by Jakob Weichselbaumer on 11.05.2021.
 //
 
-#ifndef FEED_UVL_FINDING_COMPARATIVELY_ACCEPTER_RBAI_H
-#define FEED_UVL_FINDING_COMPARATIVELY_ACCEPTER_RBAI_H
+#ifndef FEED_UVL_FINDING_COMPARATIVELY_FREQUENCY_ACCEPTER_H
+#define FEED_UVL_FINDING_COMPARATIVELY_FREQUENCY_ACCEPTER_H
 #include <iostream>
 #include <string>
 #include "../../includes/rapidxml/rapidxml.hpp"
 #include "../model/file_accepter.h"
 #include "../model_builder/xml_reader.h"
-#include "../model/frequency_rbai_model.h"
+#include "../model/frequency_model.h"
 #include "../model/model_depth_wrapper.h"
 #include "../util/str_util.h"
 
 using namespace std;
 
-class accepter_rbai : public file_accepter<frequency_rbai_model> {
+class frequency_accepter : public file_accepter<frequency_model> {
 public:
     [[nodiscard]] bool file_is_acceptable(const filesystem::directory_entry & entry) const override {
         return !entry.is_directory() && str_util::hasEnding(entry.path().string(), ".xml");
     }
 
-    static void word_search(xml_node<> * word_container, model_depth_wrapper<frequency_rbai_model> & model){
+    static void word_search(xml_node<> * word_container, model_depth_wrapper<frequency_model> & model){
         for(xml_node<> * maybe_word_node = word_container->first_node(); maybe_word_node; maybe_word_node = maybe_word_node->next_sibling()){
             if(maybe_word_node->name()==w_container_hi || maybe_word_node->name()==w_container_mw){  // highlighted word or multi-word
                 word_search(maybe_word_node, model);
@@ -37,6 +37,7 @@ public:
 
                         //model.m.recurse_print_concepts();
                     }
+
                     if(find(allowed_word_tags.begin(), allowed_word_tags.end(), pos->value())!=allowed_word_tags.end()){
                         //  word is allowed, get the headword
                         xml_attribute<> * hw = maybe_word_node->first_attribute("hw");
@@ -57,6 +58,7 @@ public:
                                 }
                             }
                             model.next_word();
+
                         }
                     } else {  // make a list of omitted words for use when querying the model
 
@@ -76,7 +78,7 @@ public:
         }
     }
 
-    static void recursive_sentence_search(const string& sentence_container_tagname, const xml_node<> * parent_node, model_depth_wrapper<frequency_rbai_model> & model){
+    void recursive_sentence_search(const string& sentence_container_tagname, const xml_node<> * parent_node, model_depth_wrapper<frequency_model> & model) const{
         for(xml_node<> * sentence_container = parent_node->first_node(sentence_container_tagname.c_str()); sentence_container; sentence_container = sentence_container->next_sibling()){
             recursive_sentence_search(s_container_div, sentence_container, model);
             recursive_sentence_search(s_container_head, sentence_container, model);
@@ -86,13 +88,16 @@ public:
                 continue;  // skip non-text paragraphs
             }
             for(xml_node<> * sentence_node = sentence_container->first_node("s"); sentence_node; sentence_node = sentence_node->next_sibling()){
-                word_search(sentence_node, model);
-                model.reset_sentence();
+                if(this->mode==Mode::TRAIN_CORPUS){
+                    word_search(sentence_node, model);
+                    model.reset_sentence();
+                }
+
             }
         }
     }
 
-    void process_file(const filesystem::directory_entry &entry, const frequency_rbai_model & model) const override {
+    void process_file(const filesystem::directory_entry &entry, const frequency_model & model) const override {
         string filepath = entry.path().string();
 
         xml_document<> doc;
@@ -131,17 +136,27 @@ public:
     // the tag indicating a word
     static string word_tag;
 
+    enum Mode{TRAIN_CORPUS, DEC_TREE}; // an enum for type of run
+    explicit frequency_accepter(Mode mode);
+private:
+    Mode mode;
+
 };
 
+frequency_accepter::frequency_accepter(Mode mode) {
+    this->mode = mode;
+}
 
-string accepter_rbai::s_container_div = "div";
-string accepter_rbai::s_container_p = "p";
-string accepter_rbai::s_container_head = "head";
+string frequency_accepter::s_container_div = "div";
+string frequency_accepter::s_container_p = "p";
+string frequency_accepter::s_container_head = "head";
 
-string accepter_rbai::w_container_hi = "hi";  // highlights
-string accepter_rbai::w_container_mw = "mw";  // multi-words
-string accepter_rbai::word_tag = "w";
+string frequency_accepter::w_container_hi = "hi";  // highlights
+string frequency_accepter::w_container_mw = "mw";  // multi-words
+string frequency_accepter::word_tag = "w";
 
-vector<string> accepter_rbai::allowed_word_tags = {"AJ0", "AJC", "AJS", "AV0", "ITJ", "NN0", "NN1", "NN2",
+vector<string> frequency_accepter::allowed_word_tags = {"AJ0", "AJC", "AJS", "AV0", "ITJ", "NN0", "NN1", "NN2",
                                                            "NP0", "ORD","VM0", "VVB", "VVD", "VVG", "VVI", "VVN", "VVZ", "XX0", "ZZ0" };
-#endif //FEED_UVL_FINDING_COMPARATIVELY_ACCEPTER_RBAI_H
+
+
+#endif //FEED_UVL_FINDING_COMPARATIVELY_FREQUENCY_ACCEPTER_H

@@ -15,10 +15,10 @@
 template <class model_type> struct model_depth_wrapper {
 
     const model_type & m;
-    vector<concept_node<string>*> list = vector<concept_node<string>*>();  //  concept length of n <=> list of n stored concept nodes
-    unsigned int current_full_concept = 0; // index of the current/next concept to reach full length
-    unsigned int current_word_index = 0;  //  only need to count to the term length
-    bool pipeline_loaded = false;
+    mutable vector<concept_node<string>*> list = vector<concept_node<string>*>();  //  concept length of n <=> list of n stored concept nodes
+    mutable unsigned int current_full_concept = 0; // index of the current/next concept to reach full length
+    mutable unsigned int current_word_index = 0;  //  only need to count to the term length
+    mutable bool pipeline_loaded = false;
 
     explicit model_depth_wrapper(const model_type & model) : m(model){
         reset_sentence();

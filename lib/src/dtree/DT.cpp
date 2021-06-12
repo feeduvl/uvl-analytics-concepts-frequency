@@ -285,15 +285,23 @@ private:
     ifstream fin;
     Table table;
 public:
+
+    InputReader(){};
+
     InputReader(string filename) {
         fin.open(filename);
         if(!fin) {
             cout << filename << " file could not be opened\n";
             exit(0);
         }
-        parse();
+        parse_from_file();
     }
-    void parse() {
+    void set_data(vector<string> & candidate_tokens_with_label_column, vector<vector<string>> & training_data){
+        table.attrName = candidate_tokens_with_label_column;
+        table.data = training_data;
+    }
+
+    void parse_from_file() {
         string str;
         bool isAttrName = true;
         while(!getline(fin, str).eof()){

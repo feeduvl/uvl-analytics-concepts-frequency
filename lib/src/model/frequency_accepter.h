@@ -60,18 +60,27 @@ public:
                             model.next_word();
 
                         }
-                    } else {  // make a list of omitted words for use when querying the model
+                    }
+                }
+            }
+        }
+    }
 
-                        /*
-                        xml_attribute<> * hw = maybe_word_node->first_attribute("hw");
-                        string pos_tag = pos->value();
-                        if(pos_tag.find('-') == std::string::npos    // - denotes ambiguity, not a stop word
-                                && hw){
-                            string word = hw->value();
-                            model.m.omit_word(word);
-                            //cout << "Omitting word: '" << word << "' of type: '" << pos->value() << endl;
-                        }*/
-
+    static void decision_tree_word_search(xml_node<> * word_container, model_depth_wrapper<frequency_model> & model, vector<string> & sentence) {
+        for (xml_node<> *maybe_word_node = word_container->first_node(); maybe_word_node; maybe_word_node = maybe_word_node->next_sibling()) {
+            if (maybe_word_node->name() == w_container_hi ||
+                maybe_word_node->name() == w_container_mw) {  // highlighted word or multi-word
+                word_search(maybe_word_node, model);
+            } else if (maybe_word_node->name() == word_tag) {  // word node
+                xml_attribute<> *pos = maybe_word_node->first_attribute("c5");
+                if (pos) {
+                    if (find(allowed_word_tags.begin(), allowed_word_tags.end(), pos->value()) !=
+                        allowed_word_tags.end()) {
+                        //  word is allowed, get the headword
+                        xml_attribute<> *hw = maybe_word_node->first_attribute("hw");
+                        if (hw) {
+                            model.m.process_token_dec_tree(sentence, hw->value());
+                        }
                     }
                 }
             }
@@ -91,6 +100,12 @@ public:
                 if(this->mode==Mode::TRAIN_CORPUS){
                     word_search(sentence_node, model);
                     model.reset_sentence();
+                } else if(this->mode == Mode::DEC_TREE){
+                    if((rand()%100)==0){
+                        vector<string> sentence = model.m.get_empty_sentence();
+                        decision_tree_word_search(sentence_node, model, sentence);
+                        model.m.add_dec_tree_sentence(sentence, "BNC");
+                    }
                 }
 
             }

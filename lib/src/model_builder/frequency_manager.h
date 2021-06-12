@@ -166,15 +166,6 @@ private:
         }
     }
 
-    static string vector_to_string(vector<string> & next_parent){
-        string next_parent_string;
-        for(string & t : next_parent){
-            next_parent_string += (t + " ");
-        }
-        next_parent_string.pop_back();
-        return next_parent_string;
-    }
-
     void recurse_find_vector_concepts_and_frequencies(concept_node<string> * node,
                                                       const vector<string> & parent_concept,
                                                       bool first) {
@@ -190,7 +181,7 @@ private:
             }
             input_concept_vectors_sorted.push_back(next_parent);
             input_frequencies.push_back(frequency);
-            string next_parent_string = vector_to_string(next_parent);
+            string next_parent_string = str_util::vector_to_string(next_parent);
             int corpus_index = get_index_in_corpus(next_parent_string);
             position_mapping_input_to_corpus.push_back(corpus_index);
             c->corpus_index = corpus_index;
@@ -393,6 +384,10 @@ public:
     }
 
 private:
+
+    const string sentence_delimiters = "\n.:!?”““„〟„()[]{}&$%+#*~<>|/\0";
+    const string word_delimiters = " ,—-\t\"'"+sentence_delimiters;
+
     void get_tokens(string & analyze_this, bool from_file, bool save_tokenization){
 
         string content;
@@ -404,8 +399,6 @@ private:
             content = analyze_this;
         }
 
-        string sentence_delimiters = "\n.:!?\0";
-        string word_delimiters = " ,—-\t\"”“〟„()[]{}&$%+#*~<>|/'"+sentence_delimiters;
         vector<vector<string>> tokens = tokenize(content, const_cast<char *>(sentence_delimiters.c_str()),
                                                  const_cast<char *>(word_delimiters.c_str()));
         if(save_tokenization){
@@ -435,6 +428,7 @@ private:
     static double get_relevance_fcic(double F_corpus, double F_input){
         return F_input / (F_corpus + F_input);
     }
+
 public:
     json::JSON run_rbai(string & analyze_this, int & return_num_concepts, bool from_file){
         get_tokens(analyze_this, from_file, false);
@@ -445,13 +439,6 @@ public:
         auto n_c = (double)total_words_corpus;
 
         for(int i = 0; i < input_frequencies.size(); i++){
-            /*double w_d = input_frequencies[i];
-            double w_c = position_mapping_input_to_corpus[i] == -1 ? 0: corpus_frequencies[position_mapping_input_to_corpus[i]];
-
-            double ll = compute_log_likelihood(w_d,
-                                               w_c,
-                                               ,
-                                               ;*/
 
             double ll = compute_term_log_likelihood(input_concept_vectors_sorted[i], n_d, n_c);
             log_likelihoods_input.push_back(ll);
@@ -465,23 +452,27 @@ public:
         j["topics"]["scores"] = json::Array();
 
         for(int i = 0; i < min(return_num_concepts, (int) ranking.size()); ++i){
-            j["topics"]["concepts"][i] = vector_to_string(input_concept_vectors_sorted[ranking[ranking.size() - 1 - i]]);
+            j["topics"]["concepts"][i] = str_util::vector_to_string(input_concept_vectors_sorted[ranking[ranking.size() - 1 - i]]);
             j["topics"]["scores"][i] = log_likelihoods_input[ranking[ranking.size()-1-i]];
         }
         return j;
     }
 
+    const frequency_model & get_model(){
+        return model_wrapper.m;
+    }
     vector<string> run_fcic(string & analyze_this, int & return_num_concepts, bool from_file){
         get_tokens(analyze_this, from_file, true);
 
-        recurse_find_string_concepts_and_frequencies();
+        recurse_find_string_concepts_and_frequencies();  // we can use "..._string_..." here because we limit this algorithm to concepts of length 1
 
         vector<double> frequency_scores_input;
         vector<string> candidate_concepts;
 
+        frequency_scores_input = vector<double>(input_frequencies.size(), 0);
         for(int i = 0; i < input_frequencies.size(); i++){
-            frequency_scores_input.push_back(get_relevance_fcic( position_mapping_input_to_corpus[i] == -1 ? 0: corpus_frequencies[position_mapping_input_to_corpus[i]],
-                                                                 input_frequencies[i]));
+            frequency_scores_input[i] = get_relevance_fcic( position_mapping_input_to_corpus[i] == -1 ? 0: corpus_frequencies[position_mapping_input_to_corpus[i]],
+                                                                 input_frequencies[i]);
         }
 
         vector<size_t> ranking = sort_indexes(frequency_scores_input);
@@ -489,8 +480,19 @@ public:
         for(int i = 0; i < min(return_num_concepts, (int) ranking.size()); ++i){
             candidate_concepts.push_back(input_concept_strings_sorted[ranking[ranking.size() - 1 - i]]);
         }
+
+        get_model().setCandidateTokensDecTree(candidate_concepts);
+        for(auto & sentence : tokenized_input){
+            vector<string> s = get_model().get_empty_sentence(candidate_concepts);
+            for(auto & token : sentence){
+                get_model().process_token_dec_tree(s, token);
+            }
+            get_model().add_dec_tree_sentence(s, "input");
+        }
+
         return candidate_concepts;
     }
+
 
 };
 

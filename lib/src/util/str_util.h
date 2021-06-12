@@ -7,11 +7,22 @@
 
 #include <iostream>
 #include <string>
+#include <utility>
+#include <vector>
+#include <map>
+#include <fstream>
+#include <cmath>
+#include <numeric>
+#include <chrono>
+#include <algorithm>
 #include "../../includes/rapidxml/rapidxml.hpp"
 #include "../model/file_accepter.h"
 #include "../model_builder/xml_reader.h"
 #include "../model/frequency_model.h"
 #include "../model/model_depth_wrapper.h"
+#include "../graph/concept_node.h"
+#include "../util/str_util.h"
+#include "../io/json.h"
 
 class str_util{
 
@@ -22,6 +33,15 @@ public:
         } else {
             return false;
         }
+    }
+
+    static string vector_to_string(vector<string> & next_parent){
+        string next_parent_string;
+        for(string & t : next_parent){
+            next_parent_string += (t + " ");
+        }
+        next_parent_string.pop_back();
+        return next_parent_string;
     }
 };
 

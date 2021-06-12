@@ -7,6 +7,7 @@
 #include "src/model/frequency_accepter.h"
 #include "src/model_builder/directory_walker.h"
 #include "src/model_builder/frequency_manager.h"
+#include "src/dtree/decision_tree.h"
 using namespace std;
 
 
@@ -41,7 +42,6 @@ int main(int argc, char** argv) {
 
         string analyze_text = argv[7];
         int return_num_concepts = stoi(argv[8]);
-        string training_dir_path = argv[9];
 
         frequency_model model = frequency_model(concept_length);
         frequency_manager manager = frequency_manager(model);
@@ -67,9 +67,57 @@ int main(int argc, char** argv) {
              * R. Lecoeuche, "Finding comparatively important concepts between texts," Proceedings ASE 2000. Fifteenth IEEE International Conference on Automated Software Engineering, 2000, pp. 55-60, doi: 10.1109/ASE.2000.873650.
              */
 
+            string training_dir_path = argv[9];
+            vector<string> candidate_concepts = manager.run_fcic(analyze_text, return_num_concepts, false);
+
+            cout << "Candidate concepts: " << str_util::vector_to_string(candidate_concepts) << endl;
+
             auto accepter_fcic = frequency_accepter(frequency_accepter::Mode::DEC_TREE);
             frequency_model m = frequency_model((unsigned int) concept_length);
+            m.setCandidateTokensDecTree(candidate_concepts);
             directory_walker walker = directory_walker<frequency_model>(training_dir_path, accepter_fcic, m);
+
+            vector<vector<string>> decision_tree_data = manager.get_model().getDecTreeTrainingData();  // the data gathered from the input
+
+            cout << "Finished reading files. Sentences in input:  " <<  decision_tree_data.size() << endl;
+            cout << "Sentences in corpus: " << m.getDecTreeTrainingData().size() << endl;
+
+            decision_tree_data.insert(decision_tree_data.end(), m.getDecTreeTrainingData().begin(), m.getDecTreeTrainingData().end());  // concatenate the two datasets
+
+            int lines = 0;
+
+            for(auto & s : decision_tree_data){
+                //cout << str_util::vector_to_string(s) << endl;
+                if(++lines == 600){
+                    break;
+                }
+            }
+            DecisionTree dt;
+            set<string> target_vals;
+            vector<string> attr_names = candidate_concepts;
+
+            target_vals.insert("BNC");
+            target_vals.insert("input");
+
+            dt.addTargetValues(target_vals);
+
+            vector<string> enums = {"false", "true"};
+
+            for(string & candidate : candidate_concepts){
+                dt.addAttrInfo(candidate, enums);
+            }
+
+            vector<Example> examples;
+            for(auto & line : decision_tree_data){
+                std::string target_value = line[line.size() - 1];
+                line.pop_back();
+                examples.emplace_back(candidate_concepts, line, target_value);
+            }
+
+            cout << "Building decision tree... " << endl;
+
+            dt.build(examples);
+            dt.print();
 
         } else {
             cerr << "Got undefined algorithm: '" << algo_name << "', exiting." << endl;

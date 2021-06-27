@@ -45,6 +45,8 @@ int main(int argc, char** argv) {
         string analyze_text = argv[7];
         int return_num_concepts = stoi(argv[8]);
 
+        string name = argv[9];
+
         frequency_model model = frequency_model(concept_length);
         frequency_manager manager = frequency_manager(model);
 
@@ -60,6 +62,7 @@ int main(int argc, char** argv) {
              */
 
             json::JSON algo_return = manager.run_rbai(analyze_text, return_num_concepts, false);
+            algo_return["name"] = name;
             // program output, then exit
             cout << algo_return << endl;
 
@@ -69,7 +72,7 @@ int main(int argc, char** argv) {
              * R. Lecoeuche, "Finding comparatively important concepts between texts," Proceedings ASE 2000. Fifteenth IEEE International Conference on Automated Software Engineering, 2000, pp. 55-60, doi: 10.1109/ASE.2000.873650.
              */
 
-            string training_dir_path = argv[9];
+            string training_dir_path = argv[10];
             vector<string> candidate_concepts = manager.run_fcic(analyze_text, return_num_concepts, false);
 
             cout << "Candidate concepts: " << str_util::vector_to_string(candidate_concepts) << endl;
@@ -108,6 +111,8 @@ int main(int argc, char** argv) {
             std::cout << str_util::vector_to_string(tree) << std::endl;*/
 
             json::JSON j;
+
+            j["name"] = name;
 
             j["topics"] = json::Object();
             j["topics"]["concepts"] = json::Array();

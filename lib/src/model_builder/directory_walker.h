@@ -17,13 +17,15 @@ using namespace std;
 
 template <class M> class directory_walker{
 public:
-    explicit directory_walker(const string& directory_path, const file_accepter<M> & f_a, const M & m ) {
+    explicit directory_walker(const string& directory_path, const file_accepter<M> & f_a, const M & m , bool squelch) {
         for(const auto & entry : filesystem::directory_iterator(directory_path)){
             if(entry.is_directory()){
-                directory_walker<M>(entry.path().string(), f_a, m);
+                directory_walker<M>(entry.path().string(), f_a, m, squelch);
             } else {
                 if(f_a.file_is_acceptable(entry)){
-                    cout << "Processing: " << entry.path().string() << endl;
+                    if(!squelch){
+                        cout << "Processing: " << entry.path().string() << endl;
+                    }
                     try{
                         f_a.process_file(entry, m);
                     } catch(exception & e){

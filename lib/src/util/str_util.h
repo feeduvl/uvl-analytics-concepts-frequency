@@ -15,15 +15,9 @@
 #include <numeric>
 #include <chrono>
 #include <algorithm>
-#include "../../includes/rapidxml/rapidxml.hpp"
-#include "../model/file_accepter.h"
-#include "../model_builder/xml_reader.h"
-#include "../model/frequency_model.h"
-#include "../model/model_depth_wrapper.h"
-#include "../graph/concept_node.h"
-#include "../util/str_util.h"
-#include "../io/json.h"
+#include <string>
 
+using namespace std;
 class str_util{
 
 public:
@@ -35,12 +29,24 @@ public:
         }
     }
 
-    static string vector_to_string(vector<string> & next_parent){
+    static string vector_to_string(vector<int> & stringify){
         string next_parent_string;
-        for(string & t : next_parent){
+        for(int & t : stringify){
+            next_parent_string += (std::to_string(t) + " ");
+        }
+        if(next_parent_string!=""){
+            next_parent_string.pop_back();
+        }
+        return next_parent_string;
+    }
+    static string vector_to_string(vector<string> & stringify){
+        string next_parent_string;
+        for(string & t : stringify){
             next_parent_string += (t + " ");
         }
-        next_parent_string.pop_back();
+        if(next_parent_string!=""){
+            next_parent_string.pop_back();
+        }
         return next_parent_string;
     }
 };

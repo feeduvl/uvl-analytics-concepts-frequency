@@ -385,8 +385,8 @@ public:
 
 private:
 
-    const string sentence_delimiters = "\n.:!?”““„〟„()[]{}&$%+#*~<>|/\0";
-    const string word_delimiters = " ,—-\t\"'"+sentence_delimiters;
+    const string sentence_delimiters = "\n.;:!?”““„〟„()[]{}&$%+#*~<>|/\0";
+    const string word_delimiters = " ,—-\t\"'0123456789"+sentence_delimiters;
 
     void get_tokens(string & analyze_this, bool from_file, bool save_tokenization){
 
@@ -483,11 +483,11 @@ public:
 
         get_model().setCandidateTokensDecTree(candidate_concepts);
         for(auto & sentence : tokenized_input){
-            vector<string> s = get_model().get_empty_sentence(candidate_concepts);
+            vector<bool> s = get_model().get_empty_sentence(candidate_concepts);
             for(auto & token : sentence){
                 get_model().process_token_dec_tree(s, token);
             }
-            get_model().add_dec_tree_sentence(s, "input");
+            get_model().add_dec_tree_sentence(s, true);
         }
 
         return candidate_concepts;

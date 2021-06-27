@@ -66,7 +66,7 @@ public:
         }
     }
 
-    static void decision_tree_word_search(xml_node<> * word_container, model_depth_wrapper<frequency_model> & model, vector<string> & sentence) {
+    static void decision_tree_word_search(xml_node<> * word_container, model_depth_wrapper<frequency_model> & model, vector<bool> & sentence) {
         for (xml_node<> *maybe_word_node = word_container->first_node(); maybe_word_node; maybe_word_node = maybe_word_node->next_sibling()) {
             if (maybe_word_node->name() == w_container_hi ||
                 maybe_word_node->name() == w_container_mw) {  // highlighted word or multi-word
@@ -101,10 +101,10 @@ public:
                     word_search(sentence_node, model);
                     model.reset_sentence();
                 } else if(this->mode == Mode::DEC_TREE){
-                    if((rand()%100)==0){
-                        vector<string> sentence = model.m.get_empty_sentence();
+                    if((rand()%20)==0){
+                        vector<bool> sentence = model.m.get_empty_sentence();
                         decision_tree_word_search(sentence_node, model, sentence);
-                        model.m.add_dec_tree_sentence(sentence, "BNC");
+                        model.m.add_dec_tree_sentence(sentence, false);
                     }
                 }
 

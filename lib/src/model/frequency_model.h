@@ -21,7 +21,7 @@ using namespace std;
 class frequency_model : public model<string> {
 
     mutable vector<string> candidate_tokens_dec_tree = vector<string>();
-    mutable vector<vector<string>> dec_tree_training_data = vector<vector<string>>();
+    mutable vector<vector<bool>> dec_tree_training_data = vector<vector<bool>>();
 
 
     mutable vector<string> omitted_words = vector<string>();
@@ -94,26 +94,26 @@ public:
         }
     }
 
-    vector<string> get_empty_sentence(vector<string> & candidate_concepts) const{
-        vector<string> empty_sentence = vector<string>(candidate_concepts.size(), "false");
+    vector<bool> get_empty_sentence(vector<string> & candidate_concepts) const{
+        vector<bool> empty_sentence = vector<bool>(candidate_concepts.size(), false);
         return empty_sentence;
     }
 
-    vector<string> get_empty_sentence() const{
+    vector<bool> get_empty_sentence() const{
         return get_empty_sentence(candidate_tokens_dec_tree);
     }
 
 
-    void add_dec_tree_sentence(vector<string> & sentence, string label) const {
+    void add_dec_tree_sentence(vector<bool> & sentence, bool label) const {
         dec_tree_training_data.push_back(sentence);
         dec_tree_training_data[dec_tree_training_data.size()-1].push_back(label);
     }
 
-    void process_token_dec_tree(vector<string> & sentence_data, const string & token) const{
+    void process_token_dec_tree(vector<bool> & sentence_data, const string & token) const{
         for(int i = 0; i < candidate_tokens_dec_tree.size(); i++){
-            if(!(sentence_data[i]=="true")){
+            if(!sentence_data[i]){
                 if(token == candidate_tokens_dec_tree[i]){
-                    sentence_data[i] = "true";
+                    sentence_data[i] = true;
                     return;
                 }
             }
@@ -124,7 +124,7 @@ public:
         candidate_tokens_dec_tree = candidateTokensDecTree;
     }
 
-    const vector<vector<string>> &getDecTreeTrainingData() const {
+    const vector<vector<bool>> &getDecTreeTrainingData() const {
         return dec_tree_training_data;
     }
 };

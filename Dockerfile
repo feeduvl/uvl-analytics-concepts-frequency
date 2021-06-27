@@ -19,6 +19,7 @@ RUN g++ -Wall main.cpp \
         ./src/model_builder/directory_walker.h \
         ./src/model_builder/frequency_manager.h \
         ./src/util/str_util.h \
+        ./src/util/math_util.h \
         ./src/io/json.h \
         -o feed_uvl_finding_comparatively -std=c++17 -lstdc++fs
 

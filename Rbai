@@ -21,6 +21,8 @@ RUN g++ -Wall main.cpp \
         ./src/util/str_util.h \
         ./src/util/math_util.h \
         ./src/io/json.h \
+        ./src/dtree/decision_tree.h\
+        ./src/dtree/decision_tree.cpp\
         -o feed_uvl_rbai -std=c++17 -lstdc++fs
 
 # RUN cmake -S . -B . && make

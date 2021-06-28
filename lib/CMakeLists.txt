@@ -25,6 +25,6 @@ add_executable(feed_uvl_finding_comparatively
         src/model_builder/directory_walker.h
         src/model_builder/frequency_manager.h
         src/util/str_util.h
-        src/io/json.h src/dtree/DT.cpp src/dtree/decision_tree.h src/dtree/decision_tree.cpp src/util/math_util.h)
+        src/io/json.h src/dtree/decision_tree.h src/dtree/decision_tree.cpp src/util/math_util.h)
 
 target_compile_features(feed_uvl_finding_comparatively PRIVATE cxx_std_17)

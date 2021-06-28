@@ -16,6 +16,8 @@
 #include <chrono>
 #include <algorithm>
 
+#include "../model/model_depth_wrapper.h"
+#include "../model/frequency_model.h"
 #include "../graph/concept_node.h"
 #include "../util/str_util.h"
 #include "../io/json.h"

@@ -13,11 +13,9 @@ dictConfig({
 app.logger.info("Server starting now.")
 
 
-@app.route("/hitec/classify/concepts/frequency-rbai/run", methods=["POST"])
+@app.route("/hitec/classify/concepts/frequency-fcic/run", methods=["POST"])
 def post_classification_result():
-    app.logger.debug('/hitec/classify/concepts/frequency-rbai/run called')
-
-    # app.logger.debug(request.data.decode('utf-8'))
+    app.logger.debug('/hitec/classify/concepts/frequency-fcic/run called')
     content = json.loads(request.data.decode('utf-8'))
 
     texts = [doc["text"] + "\n" for doc in content["dataset"]["documents"]]
@@ -25,15 +23,18 @@ def post_classification_result():
     texts = texts
 
     app.logger.debug("Processing: "+texts)
-    args = ['./lib/feed_uvl_finding_comparatively',
+    args = ['./lib/feed_uvl_fcic',
             content["params"]["command"],
             content["params"]["term_length"],
-            "rbai",
+            "fcic",
             "/app/lib/res/frequencies.txt",
             "/app/lib/res/stopwords.txt",
             "/app/lib/res/lemmatization-en.txt",
             texts,
-            content["params"]["max_num_concepts"]]
+            content["params"]["max_num_concepts"],
+            content["params"]["name"],
+            "/opt/containers/frequency-data/Small"]
+
     output = subprocess.run(args,
                             capture_output=True)
 
@@ -46,7 +47,7 @@ def post_classification_result():
     return o, 200
 
 
-@app.route("/hitec/classify/concepts/frequency-rbai/status", methods=["GET"])
+@app.route("/hitec/classify/concepts/frequency-fcic/status", methods=["GET"])
 def get_status():
     status = {
         "status": "operational",

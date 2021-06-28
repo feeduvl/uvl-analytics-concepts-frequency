@@ -91,7 +91,6 @@ int main(int argc, char** argv) {
 
             DecisionTree dt;
             dt.attribute_names = candidate_concepts;
-
             vector<Example> examples;
             for(auto & line : decision_tree_data){
                 bool target_value = line[line.size() - 1];

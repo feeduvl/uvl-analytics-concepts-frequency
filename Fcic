@@ -21,7 +21,7 @@ RUN g++ -Wall main.cpp \
         ./src/util/str_util.h \
         ./src/util/math_util.h \
         ./src/io/json.h \
-        -o feed_uvl_finding_comparatively -std=c++17 -lstdc++fs
+        -o feed_uvl_fcic -std=c++17 -lstdc++fs
 
 # RUN cmake -S . -B . && make
 
@@ -34,4 +34,4 @@ RUN pip3 install --upgrade pip -r requirements.txt
 
 WORKDIR ..
 EXPOSE 9658
-CMD [ "python3", "./app.py" ]
+CMD [ "python3", "./fcic.py" ]

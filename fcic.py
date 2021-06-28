@@ -2,7 +2,7 @@ import subprocess
 from flask import Flask, json, jsonify, request
 from logging.config import dictConfig
 
-with open('./config.json') as config_file:
+with open('config_fcic.json') as config_file:
     CONFIG = json.load(config_file)
 
 app = Flask(__name__)

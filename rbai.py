@@ -33,7 +33,8 @@ def post_classification_result():
             "/app/lib/res/stopwords.txt",
             "/app/lib/res/lemmatization-en.txt",
             texts,
-            content["params"]["max_num_concepts"]]
+            content["params"]["max_num_concepts"],
+            content["params"]["name"]]
     output = subprocess.run(args,
                             capture_output=True)
 

@@ -38,7 +38,7 @@ def post_classification_result():
     output = subprocess.run(args,
                             capture_output=True)
 
-    o = output.stdout.decode("utf-8", errors="ignore")
+    o = output.stdout.decode("utf-8", errors="replace")
     errors = output.stderr.decode("utf-8", errors="ignore")
     app.logger.debug("Program output: " + o)
     if errors is not None and errors != "":

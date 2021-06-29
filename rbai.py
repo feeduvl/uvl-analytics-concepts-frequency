@@ -24,7 +24,7 @@ def post_classification_result():
     texts = "".join(texts)
     texts = texts
 
-    app.logger.debug("Processing: "+texts)
+    #app.logger.debug("Processing: "+texts)
     args = ['./lib/feed_uvl_rbai',
             content["params"]["command"],
             content["params"]["term_length"],

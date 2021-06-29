@@ -58,6 +58,7 @@ void DecisionTree::build(std::vector<Example>& train_data) {
         all_indices.push_back(i++);
     }
     root = new DecisionTreeNode();
+    information_gain = std::vector<double>(this->attribute_names.size(), 0);
     build(train_data, root, all_indices);
 }
 
@@ -107,6 +108,7 @@ void DecisionTree::build(std::vector<Example> & train_data,
             del_index = i;
         }
     }
+    this->information_gain[max_index] = max_gain;
     // now, the attribute to be placed has been found
     std::string attr_name = this->attribute_names[max_index];
 

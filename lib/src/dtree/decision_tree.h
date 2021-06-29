@@ -53,6 +53,8 @@ public:
     std::vector<std::string> tree_to_vec();
 
     std::vector<std::string> attribute_names;
+    std::vector<double> information_gain;
+
 private:
 
     void get_label_counts(std::vector<Example> & train_data, unsigned int & pos_count , unsigned int & neg_count);

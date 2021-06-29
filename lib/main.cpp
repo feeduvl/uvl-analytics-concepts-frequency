@@ -115,10 +115,12 @@ int main(int argc, char** argv) {
 
             j["topics"] = json::Object();
             j["topics"]["concepts"] = json::Array();
+            j["topics"]["information_gain"] = json::Array();
             j["topics"]["tree"] = json::Array();
 
             for(int i = 0; i < candidate_concepts.size(); i++){
                 j["topics"]["concepts"][i] = candidate_concepts[i];
+                j["topics"]["information_gain"] = dt.information_gain[i];
             }
             for(int i = 0; i < tree.size(); i++){
                 j["topics"]["tree"][i] = tree[i];

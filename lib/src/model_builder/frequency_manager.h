@@ -388,7 +388,7 @@ public:
 private:
 
     const string sentence_delimiters = "\n.;:!?”““„〟„()[]{}&$%+#*~<>|/\0";
-    const string word_delimiters = " ,—-\t\"'0123456789"+sentence_delimiters;
+    const string word_delimiters = " ,—-\t\"'‘0123456789"+sentence_delimiters;
 
     void get_tokens(string & analyze_this, bool from_file, bool save_tokenization){
 

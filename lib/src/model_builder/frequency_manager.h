@@ -108,7 +108,7 @@ private:
             }
 
             const auto it = lower_bound(stopwords_sorted.begin(), stopwords_sorted.end(), token);
-            if(!is_numeric && !token.empty() && (it == stopwords_sorted.end() || *it != token)){
+            if(!is_numeric && token.size() >= 3 && (it == stopwords_sorted.end() || *it != token)){
                 //cout << "Got token: " << token << endl;
                 ++model_wrapper.m.total_words_into_model;
                 auto iter = lemma_map.find(token);

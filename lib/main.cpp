@@ -120,7 +120,7 @@ int main(int argc, char** argv) {
 
             for(int i = 0; i < candidate_concepts.size(); i++){
                 j["topics"]["concepts"][i] = candidate_concepts[i];
-                j["topics"]["information_gain"] = dt.information_gain[i];
+                j["topics"]["information_gain"][i] = dt.information_gain[i];
             }
             for(int i = 0; i < tree.size(); i++){
                 j["topics"]["tree"][i] = tree[i];

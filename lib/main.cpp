@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
             string training_dir_path = argv[10];
             vector<string> candidate_concepts = manager.run_fcic(analyze_text, return_num_concepts, false);
 
-            cout << "Candidate concepts: " << str_util::vector_to_string(candidate_concepts) << endl;
+            //cout << "Candidate concepts: " << str_util::vector_to_string(candidate_concepts) << endl;
 
             auto accepter_fcic = frequency_accepter(frequency_accepter::Mode::DEC_TREE);
             frequency_model m = frequency_model((unsigned int) concept_length);

@@ -10,8 +10,10 @@ def find_occurences(content, result, program_name):
     :param program_name:
     :return:
     '''
-    result.topics.text_ids = []
-    result.topics.text_occurences = []
+
+    text_ids, text_occurences = [], []
+    result["topics"]["text_ids"] = text_ids
+    result["topics"]["text_occurences"] = text_occurences
 
     for doc in content["dataset"]["documents"]:
         args = ['./lib/'+program_name,
@@ -25,7 +27,7 @@ def find_occurences(content, result, program_name):
 
         j = json.loads(outs_)
 
-        result.topics.text_ids.append(doc["id"])
-        result.topics.text_occurences.append(j.occurences)
+        text_ids.append(doc["id"])
+        text_occurences.append(j["occurences"])
 
     return result

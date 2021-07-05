@@ -432,6 +432,32 @@ private:
     }
 
 public:
+
+    /**
+     * Returns a list representing the number of occurences for each concept
+     * @param analyze_this
+     * @param key_lemmas
+     * @return
+     */
+
+    vector<unsigned int> find_occurences(string & analyze_this, vector<string> & key_lemmas) {
+
+        vector<unsigned int> occurences = vector<unsigned int>(key_lemmas.size(), 0);
+        vector<vector<string>> tokens = tokenize(analyze_this, const_cast<char *>(sentence_delimiters.c_str()),
+                                                 const_cast<char *>(word_delimiters.c_str()));
+        for(vector<string> & s : tokens){
+            for(string & t : s){
+                for(int i = 0; i < key_lemmas.size(); i++){
+                    if(key_lemmas[i]==t){
+                        occurences[i]++;
+                    }
+                }
+            }
+        }
+
+        return occurences;
+    }
+
     json::JSON run_rbai(string & analyze_this, int & return_num_concepts, bool from_file){
         get_tokens(analyze_this, from_file, false);
         recurse_find_vector_concepts_and_frequencies();

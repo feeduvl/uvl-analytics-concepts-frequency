@@ -1,9 +1,13 @@
 import subprocess
-from flask import Flask, json, jsonify, request
+import json
+from flask import Flask, jsonify, request
+from flask import json as fjson
 from logging.config import dictConfig
 
+from find_occurences import find_occurences
+
 with open('config_rbai.json') as config_file:
-    CONFIG = json.load(config_file)
+    CONFIG = fjson.load(config_file)
 
 app = Flask(__name__)
 
@@ -18,13 +22,12 @@ def post_classification_result():
     app.logger.debug('/hitec/classify/concepts/frequency-rbai/run called')
 
     # app.logger.debug(request.data.decode('utf-8'))
-    content = json.loads(request.data.decode('utf-8'))
+    content = fjson.loads(request.data.decode('utf-8'))
 
     texts = [doc["text"] + "\n" for doc in content["dataset"]["documents"]]
     texts = "".join(texts)
     texts = texts
 
-    #app.logger.debug("Processing: "+texts)
     args = ['./lib/feed_uvl_rbai',
             content["params"]["command"],
             content["params"]["term_length"],
@@ -35,8 +38,7 @@ def post_classification_result():
             texts,
             content["params"]["max_num_concepts"],
             content["params"]["name"]]
-    output = subprocess.run(args,
-                            capture_output=True)
+    output = subprocess.run(args, capture_output=True)
 
     o = output.stdout.decode("utf-8", errors="replace")
     errors = output.stderr.decode("utf-8", errors="ignore")
@@ -44,7 +46,9 @@ def post_classification_result():
     if errors is not None and errors != "":
         app.logger.error("Program errors: " + errors)
 
-    return o, 200
+    result = json.loads(o)
+
+    return json.dumps(find_occurences(content, result, "feed_uvl_rbai")), 200
 
 
 @app.route("/hitec/classify/concepts/frequency-rbai/status", methods=["GET"])

@@ -133,7 +133,29 @@ int main(int argc, char** argv) {
             return 1;
         }
 
-    }  else {
+    } else if(command == "find_occurences"){
+        string text = argv[2];
+        vector<string> find_lemmas;
+        for(int i = 0; i < argc - 3; i++){
+            find_lemmas.emplace_back(argv[i]);
+        }
+
+        frequency_model model = frequency_model(1); // arbitrary concept length
+        frequency_manager manager = frequency_manager(model);  //  TODO expose this as a static method
+
+        vector<unsigned int > occurences = manager.find_occurences(text, find_lemmas, occurences);
+
+
+        json::JSON j;
+        j["occurences"] = json::Array();
+
+        for(int i = 0; i < occurences.size(); i++){
+            j["occurences"][i] = occurences[i];
+        }
+
+        cout << j << endl;
+
+    } else {
         cerr << "Got undefined command: '" << command << "', exiting." << endl;
         return 1;
     }

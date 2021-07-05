@@ -143,8 +143,7 @@ int main(int argc, char** argv) {
         frequency_model model = frequency_model(1); // arbitrary concept length
         frequency_manager manager = frequency_manager(model);  //  TODO expose this as a static method
 
-        vector<unsigned int > occurences = manager.find_occurences(text, find_lemmas, occurences);
-
+        vector<unsigned int > occurences = manager.find_occurences(text, find_lemmas);
 
         json::JSON j;
         j["occurences"] = json::Array();

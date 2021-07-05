@@ -20,7 +20,7 @@ def find_occurences(content, result, program_name):
                 "find_occurences",
                 doc["text"]]
 
-        args += result.topics.concepts
+        args += result["topics"]["concepts"]
 
         output_ = subprocess.run(args, capture_output=True)
         outs_ = output_.stdout.decode("utf-8", errors="replace")  #  should never be an error

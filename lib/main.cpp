@@ -135,15 +135,16 @@ int main(int argc, char** argv) {
 
     } else if(command == "find_occurences"){
         string text = argv[2];
+        unsigned int concept_length = stoi(argv[3]);
         vector<string> find_lemmas;
-        for(int i = 0; i < argc - 3; i++){
+        for(int i = 0; i < argc - 4; i++){
             find_lemmas.emplace_back(argv[i]);
         }
 
         frequency_model model = frequency_model(1); // arbitrary concept length
         frequency_manager manager = frequency_manager(model);  //  TODO expose this as a static method
 
-        vector<unsigned int > occurences = manager.find_occurences(text, find_lemmas);
+        vector<unsigned int > occurences = manager.find_occurences(text, concept_length,find_lemmas);
 
         json::JSON j;
         j["occurences"] = json::Array();

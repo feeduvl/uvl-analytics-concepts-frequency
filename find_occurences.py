@@ -18,7 +18,8 @@ def find_occurences(content, result, program_name):
     for doc in content["dataset"]["documents"]:
         args = ['./lib/'+program_name,
                 "find_occurences",
-                doc["text"]]
+                doc["text"],
+                content["params"]["term_length"]]
 
         args += result["topics"]["concepts"]
 

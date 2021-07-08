@@ -436,20 +436,35 @@ public:
     /**
      * Returns a list representing the number of occurences for each concept
      * @param analyze_this
+     * @param concept_length
      * @param key_lemmas
      * @return
      */
 
-    vector<unsigned int> find_occurences(string & analyze_this, vector<string> & key_lemmas) {
+    vector<unsigned int> find_occurences(string & analyze_this, const unsigned int & concept_length, vector<string> & key_lemmas) {
 
         vector<unsigned int> occurences = vector<unsigned int>(key_lemmas.size(), 0);
         vector<vector<string>> tokens = tokenize(analyze_this, const_cast<char *>(sentence_delimiters.c_str()),
                                                  const_cast<char *>(word_delimiters.c_str()));
+
+        vector<string> pipeline;
+        vector<string> split_word;
+
         for(vector<string> & s : tokens){
+            pipeline.clear();
             for(string & t : s){
+                if(pipeline.size()>=concept_length){
+                    pipeline.pop_back();
+                }
+                pipeline.insert(pipeline.begin(), t);
+
                 for(int i = 0; i < key_lemmas.size(); i++){
-                    if(key_lemmas[i]==t){
+                    split_word.clear();
+                    str_util::split(t, split_word, ' ');
+                    std::reverse(split_word.begin(), split_word.end());
+                    if(split_word==pipeline){
                         occurences[i]++;
+                        continue;
                     }
                 }
             }

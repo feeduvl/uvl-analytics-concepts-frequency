@@ -230,17 +230,17 @@ private:
                 equivalent_frequencies.push_back(score);
             }
         }
-        vector<unsigned int> sorting_1_concepts = sort_indexes(equivalent_frequencies);
-        vector<unsigned int> index_order_1_concepts;
+        vector<size_t> sorting_1_concepts = sort_indexes(equivalent_frequencies);
+        vector<size_t> index_order_1_concepts;
         index_order_1_concepts.reserve(sorting_1_concepts.size());
 
-        for(int i = 0; i < sorting_1_concepts.size(); i++){
-            index_order_1_concepts.push_back(equivalent_indices[sorting_1_concepts[i]]);
+        for(unsigned int sorting_1_concept : sorting_1_concepts){
+            index_order_1_concepts.push_back(equivalent_indices[sorting_1_concept]);
         }
 
-        vector<unsigned int> sorting_all_concepts = sort_indexes(frequency_scores);
+        vector<size_t> sorting_all_concepts = sort_indexes(frequency_scores);
 
-        sorting_all_concepts = vector<unsigned int>(sorting_all_concepts.begin(), sorting_all_concepts.begin()+(sorting_all_concepts.size() - sorting_1_concepts.size()));  //  remove the f-score = 1 concepts
+        sorting_all_concepts = vector<size_t>(sorting_all_concepts.begin(), sorting_all_concepts.begin()+(sorting_all_concepts.size() - sorting_1_concepts.size()));  //  remove the f-score = 1 concepts
         sorting_all_concepts.insert(sorting_all_concepts.end(), index_order_1_concepts.begin(), index_order_1_concepts.end());  //  add them again in the correct order
 
         return sorting_all_concepts;

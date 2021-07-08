@@ -462,9 +462,18 @@ public:
                     split_word.clear();
                     str_util::split(key_lemmas[i], split_word, ' ');
                     std::reverse(split_word.begin(), split_word.end());
-                    if(split_word==vector<string>(pipeline.begin(), pipeline.begin()+split_word.size())){
-                        occurences[i]++;
-                        break;
+                    if(split_word.size() <= pipeline.size()){
+                        bool match = true;
+                        for(int j = 0; j < split_word.size(); j++){
+                            if(split_word[j]!=pipeline[j]){
+                                match = false;
+                                break;
+                            }
+                        }
+                        if(match){
+                            occurences[i]++;
+                            break;
+                        }
                     }
                 }
             }

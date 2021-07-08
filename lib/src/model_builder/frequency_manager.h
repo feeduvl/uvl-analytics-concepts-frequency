@@ -213,6 +213,39 @@ private:
             recurse_find_string_concepts_and_frequencies(c, next_parent, false);
         }
     }
+    /**
+     * Improve the results quality for input-only concepts, on top of a frequency-score based sorting of all concepts
+     * @param frequency_scores
+     * @param frequencies
+     * @return
+     */
+    vector<size_t> get_candidate_concept_sorting(const vector<double> & frequency_scores, const vector<unsigned int> & frequencies){
+        vector<unsigned int> equivalent_indices;
+        vector<double> equivalent_frequencies;
+
+        for(unsigned int i = 0; i < frequency_scores.size(); i++){
+            const double & score = frequency_scores[i];
+            if(score==1.){
+                equivalent_indices.push_back(i);
+                equivalent_frequencies.push_back(score);
+            }
+        }
+        vector<unsigned int> sorting_1_concepts = sort_indexes(equivalent_frequencies);
+        vector<unsigned int> index_order_1_concepts;
+        index_order_1_concepts.reserve(sorting_1_concepts.size());
+
+        for(int i = 0; i < sorting_1_concepts.size(); i++){
+            index_order_1_concepts.push_back(equivalent_indices[sorting_1_concepts[i]]);
+        }
+
+        vector<unsigned int> sorting_all_concepts = sort_indexes(frequency_scores);
+
+        sorting_all_concepts = vector<unsigned int>(sorting_all_concepts.begin(), sorting_all_concepts.begin()+(sorting_all_concepts.size() - sorting_1_concepts.size()));  //  remove the f-score = 1 concepts
+        sorting_all_concepts.insert(sorting_all_concepts.end(), index_order_1_concepts.begin(), index_order_1_concepts.end());  //  add them again in the correct order
+
+        return sorting_all_concepts;
+    }
+
     template <typename T>
     vector<size_t> sort_indexes(const vector<T> &v) {
 
@@ -527,7 +560,7 @@ public:
                                                                  input_frequencies[i]);
         }
 
-        vector<size_t> ranking = sort_indexes(frequency_scores_input);
+        vector<size_t> ranking = get_candidate_concept_sorting(frequency_scores_input, input_frequencies);
 
         for(int i = 0; i < min(return_num_concepts, (int) ranking.size()); ++i){
             candidate_concepts.push_back(input_concept_strings_sorted[ranking[ranking.size() - 1 - i]]);

@@ -139,7 +139,7 @@ int main(int argc, char** argv) {
         vector<string> find_lemmas;
         find_lemmas.reserve(argc - 4);
         for(int i = 0; i < argc - 4; i++){
-            find_lemmas.emplace_back(argv[i]);
+            find_lemmas.emplace_back(argv[4+i]);
         }
 
         frequency_model model = frequency_model(1); // arbitrary concept length

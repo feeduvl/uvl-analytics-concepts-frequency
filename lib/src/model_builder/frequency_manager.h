@@ -462,7 +462,7 @@ public:
                     split_word.clear();
                     str_util::split(key_lemmas[i], split_word, ' ');
                     std::reverse(split_word.begin(), split_word.end());
-                    if(split_word==pipeline){
+                    if(split_word==vector<string>(pipeline.begin(), pipeline.begin()+split_word.size())){
                         occurences[i]++;
                         break;
                     }

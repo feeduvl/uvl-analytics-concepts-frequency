@@ -137,6 +137,7 @@ int main(int argc, char** argv) {
         string text = argv[2];
         unsigned int concept_length = stoi(argv[3]);
         vector<string> find_lemmas;
+        find_lemmas.reserve(argc - 4);
         for(int i = 0; i < argc - 4; i++){
             find_lemmas.emplace_back(argv[i]);
         }

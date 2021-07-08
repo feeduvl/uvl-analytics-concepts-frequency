@@ -460,11 +460,11 @@ public:
 
                 for(int i = 0; i < key_lemmas.size(); i++){
                     split_word.clear();
-                    str_util::split(t, split_word, ' ');
+                    str_util::split(key_lemmas[i], split_word, ' ');
                     std::reverse(split_word.begin(), split_word.end());
                     if(split_word==pipeline){
                         occurences[i]++;
-                        continue;
+                        break;
                     }
                 }
             }

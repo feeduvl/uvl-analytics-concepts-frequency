@@ -21,6 +21,7 @@
 #include "../graph/concept_node.h"
 #include "../util/str_util.h"
 #include "../io/json.h"
+#include "../util/str_util.h"
 
 using namespace std;
 
@@ -216,20 +217,23 @@ private:
     /**
      * Improve the results quality for input-only concepts, on top of a frequency-score based sorting of all concepts
      * @param frequency_scores
-     * @param frequencies
+     * @param input_frequencies
      * @return
      */
-    vector<size_t> get_candidate_concept_sorting(const vector<double> & frequency_scores, const vector<unsigned int> & frequencies){
+    vector<size_t> get_candidate_concept_sorting(const vector<double> & frequency_scores, const vector<unsigned int> & input_frequencies){
         vector<unsigned int> equivalent_indices;
-        vector<double> equivalent_frequencies;
+        vector<unsigned int> equivalent_frequencies;
 
         for(unsigned int i = 0; i < frequency_scores.size(); i++){
             const double & score = frequency_scores[i];
             if(score==1.){
                 equivalent_indices.push_back(i);
-                equivalent_frequencies.push_back(score);
+                equivalent_frequencies.push_back(input_frequencies[i]);
             }
         }
+        //cout << str_util::vector_to_string(equivalent_indices) << endl;
+        //cout << str_util::vector_to_string(equivalent_frequencies) << endl;
+
         vector<size_t> sorting_1_concepts = sort_indexes(equivalent_frequencies);
         vector<size_t> index_order_1_concepts;
         index_order_1_concepts.reserve(sorting_1_concepts.size());

@@ -29,9 +29,9 @@ public:
         }
     }
 
-    static string vector_to_string(vector<int> & stringify){
+    template <class T> static string vector_to_string(vector<T> & stringify){
         string next_parent_string;
-        for(int & t : stringify){
+        for(T & t : stringify){
             next_parent_string += (std::to_string(t) + " ");
         }
         if(next_parent_string!=""){
@@ -39,6 +39,7 @@ public:
         }
         return next_parent_string;
     }
+
     static string vector_to_string(vector<string> & stringify){
         string next_parent_string;
         for(string & t : stringify){

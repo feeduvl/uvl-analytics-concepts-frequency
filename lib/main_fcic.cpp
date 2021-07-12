@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
         manager.read_lemmatization_map(lemmatization_file);
         manager.read_stopwords(stopwords_file);
 
-        string training_dir_path = argv[10];
+        string training_dir_path = argv[9];
         vector<string> candidate_concepts = manager.run_fcic(analyze_text, return_num_concepts, false);
 
         /*

@@ -2,12 +2,13 @@ import subprocess
 import json
 
 
-def find_occurences(content, result, program_name):
+def find_occurences(content, result, program_name, logger):
     '''
     Call the program with a list of result concepts and note the number of occurences in each text
     :param content:
     :param result:
     :param program_name:
+    :param logger: 
     :return:
     '''
 
@@ -26,6 +27,7 @@ def find_occurences(content, result, program_name):
         output_ = subprocess.run(args, capture_output=True)
         outs_ = output_.stdout.decode("utf-8", errors="replace")  #  should never be an error
 
+        logger.debug(outs_)
         j = json.loads(outs_)
 
         text_ids.append(doc["id"])

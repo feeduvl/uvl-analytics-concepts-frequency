@@ -47,7 +47,7 @@ def post_classification_result():
 
     result = json.loads(o)
 
-    return json.dumps(find_occurences(content, result, "feed_uvl_rbai")), 200
+    return json.dumps(find_occurences(content, result, "feed_uvl_rbai", app.logger)), 200
 
 
 @app.route("/hitec/classify/concepts/frequency-rbai/status", methods=["GET"])

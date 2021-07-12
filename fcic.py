@@ -55,7 +55,7 @@ def post_classification_result():
 
     result = json.loads(o)
 
-    return json.dumps(find_occurences(content, result, "feed_uvl_fcic")), 200
+    return json.dumps(find_occurences(content, result, "feed_uvl_fcic", app.logger)), 200
 
 
 @app.route("/hitec/classify/concepts/frequency-fcic/status", methods=["GET"])

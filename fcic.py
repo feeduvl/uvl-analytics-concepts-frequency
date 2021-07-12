@@ -27,7 +27,6 @@ def post_classification_result():
     args = ['./lib/feed_uvl_fcic',
             content["params"]["command"],
             content["params"]["term_length"],
-            "fcic",
             "/app/lib/res/frequencies.txt",
             "/app/lib/res/stopwords.txt",
             "/app/lib/res/lemmatization-en.txt",

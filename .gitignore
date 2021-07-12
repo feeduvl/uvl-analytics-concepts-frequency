@@ -10,3 +10,4 @@
 /lemmatization-en.txt
 /stopwords.txt
 /lib/res/test/
+/lib/CMakeLists.txt

@@ -8,7 +8,8 @@ COPY . .
 
 WORKDIR lib
 
-RUN g++ -Wall main.cpp \
+RUN g++ -Wall main_rbai.cpp \
+        ./find_occurences.h \
         ./src/graph/concept_node.h \
         ./src/model/frequency_accepter.h \
         ./src/model/frequency_model.h \

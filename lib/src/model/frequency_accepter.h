@@ -101,11 +101,9 @@ public:
                     word_search(sentence_node, model);
                     model.reset_sentence();
                 } else if(this->mode == Mode::DEC_TREE){
-                    if(1 == 1 || (rand()%20)==0){
-                        vector<bool> sentence = model.m.get_empty_sentence();
-                        decision_tree_word_search(sentence_node, model, sentence);
-                        model.m.add_dec_tree_sentence(sentence, false);
-                    }
+                    vector<bool> sentence = model.m.get_empty_sentence();
+                    decision_tree_word_search(sentence_node, model, sentence);
+                    model.m.add_dec_tree_sentence(sentence, false);
                 }
 
             }

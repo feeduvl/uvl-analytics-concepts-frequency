@@ -25,7 +25,7 @@ def post_classification_result():
     texts = texts
 
     try:
-        dataset = content["params"]["dataset"]
+        dataset = content["params"]["corpus_dataset_name"]
     except KeyError as e:
         app.logger.error("Dataset was not defined, using Small")
         dataset = "Small"

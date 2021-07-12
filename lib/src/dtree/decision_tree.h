@@ -59,7 +59,7 @@ private:
 
     void get_label_counts(std::vector<Example> & train_data, unsigned int & pos_count , unsigned int & neg_count);
 
-    void tree_to_vec(DecisionTreeNode * node, unsigned int current_depth, const unsigned int index, std::vector<std::string> & out_vec);
+    void tree_to_vec(DecisionTreeNode * node, unsigned int current_depth, const unsigned long long int index, std::vector<std::string> & out_vec);
     int depth = -1;  // by convention, the root node has depth 0, incremented on first iteration
     // Used by public 'build'
     void build(std::vector<Example> & train_data, DecisionTreeNode* p,

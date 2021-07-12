@@ -223,14 +223,14 @@ std::vector<std::string> DecisionTree::tree_to_vec() {
     return tree_out;
 }
 
-void DecisionTree::tree_to_vec(DecisionTreeNode *node, unsigned int current_depth, const unsigned int index, vector<std::string> &out_vec) {
+void DecisionTree::tree_to_vec(DecisionTreeNode *node, unsigned int current_depth, const unsigned long long int index, vector<std::string> &out_vec) {
 
     out_vec.push_back(std::to_string(index));
     out_vec.push_back(node->getAttrName());
 
     if (!node->is_leaf) {
-        unsigned int next_index_true = 2*index;
-        unsigned int next_index_false = next_index_true +1;
+        unsigned long long int next_index_true = 2*index;
+        unsigned long long int next_index_false = next_index_true +1;
 
         tree_to_vec(node->true_child, current_depth +1, next_index_true, out_vec);
         tree_to_vec(node->false_child, current_depth +1, next_index_false, out_vec);

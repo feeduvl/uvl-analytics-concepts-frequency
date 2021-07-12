@@ -70,7 +70,7 @@ public:
         for (xml_node<> *maybe_word_node = word_container->first_node(); maybe_word_node; maybe_word_node = maybe_word_node->next_sibling()) {
             if (maybe_word_node->name() == w_container_hi ||
                 maybe_word_node->name() == w_container_mw) {  // highlighted word or multi-word
-                word_search(maybe_word_node, model);
+                decision_tree_word_search(maybe_word_node, model, sentence);
             } else if (maybe_word_node->name() == word_tag) {  // word node
                 xml_attribute<> *pos = maybe_word_node->first_attribute("c5");
                 if (pos) {
@@ -124,7 +124,7 @@ public:
         xml_node<> * root_node = doc.first_node("bncDoc");
         xml_node<> * text_node = root_node->first_node("wtext");
         if(text_node == nullptr){
-            cout << "Didn't find written text node in document: "<< filepath<< endl;
+            // cout << "Didn't find written text node in document: "<< filepath<< endl;
         } else {
             model_depth_wrapper modelDepthWrapper = model_depth_wrapper(model);
             recursive_sentence_search(s_container_div, text_node, modelDepthWrapper);

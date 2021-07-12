@@ -19,7 +19,7 @@ json::JSON find_occurences(string & text, vector<string> & concepts, unsigned in
     frequency_model model = frequency_model(1); // arbitrary concept length
     frequency_manager manager = frequency_manager(model);  //  TODO expose this as a static method
 
-    vector<unsigned int > occurences = manager.find_occurences(text, concept_length,find_lemmas);
+    vector<unsigned int > occurences = manager.find_occurences(text, concept_length,concepts);
 
     json::JSON j;
     j["occurences"] = json::Array();

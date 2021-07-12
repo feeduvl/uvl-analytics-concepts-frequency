@@ -24,6 +24,16 @@ def post_classification_result():
     texts = "".join(texts)
     texts = texts
 
+    try:
+        dataset = content["params"]["dataset"]
+    except KeyError as e:
+        app.logger.error("Dataset was not defined, using Small")
+        dataset = "Small"
+
+    if dataset not in ("Small", "Medium"):
+        app.logger.error("Got unexpected dataset name: '"+str(dataset)+"', using Small")
+        dataset = "Small"
+
     args = ['./lib/feed_uvl_fcic',
             content["params"]["command"],
             content["params"]["term_length"],
@@ -33,7 +43,7 @@ def post_classification_result():
             texts,
             content["params"]["max_num_concepts"],
             content["params"]["name"],
-            "/opt/containers/frequency-data/Small"]
+            "/opt/containers/frequency-data/"+dataset]
 
     output = subprocess.run(args, capture_output=True)
 

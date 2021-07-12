@@ -28,6 +28,7 @@ json::JSON find_occurences(string & text, vector<string> & concepts, unsigned in
         j["occurences"][i] = occurences[i];
     }
 
+    return j;
 }
 
 #endif //FEED_UVL_FINDING_COMPARATIVELY_FIND_OCCURENCES_H

@@ -8,7 +8,7 @@ def find_occurences(content, result, program_name, logger):
     :param content:
     :param result:
     :param program_name:
-    :param logger: 
+    :param logger:
     :return:
     '''
 
@@ -27,7 +27,7 @@ def find_occurences(content, result, program_name, logger):
         output_ = subprocess.run(args, capture_output=True)
         outs_ = output_.stdout.decode("utf-8", errors="replace")  #  should never be an error
 
-        logger.debug(outs_)
+        #logger.debug(outs_)
         j = json.loads(outs_)
 
         text_ids.append(doc["id"])

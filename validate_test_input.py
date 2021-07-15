@@ -68,7 +68,7 @@ def validate_rbai(docs, logger):
     """
     texts = "".join([doc["text"] + "/n" for doc in docs])
     df = pd.read_excel(ground_truths_filepath)
-    tokenize_args = ["./tokenize"]
+    tokenize_args = ["./lib/tokenize"]
     target_concepts = (concept for ind, concept in df["Segment"].items())
 
     tokenize_args += target_concepts
@@ -121,7 +121,7 @@ def validate_fcic(docs, logger):
     """
     texts = "".join([doc["text"] + "/n" for doc in docs])
     df = pd.read_excel(ground_truths_filepath)
-    tokenize_args = ["./tokenize"]
+    tokenize_args = ["./lib/tokenize"]
     target_concepts = (concept for ind, concept in df["Segment"].items())
 
     tokenize_args += target_concepts

@@ -26,7 +26,7 @@ RUN g++ -Wall main_rbai.cpp \
         ./src/dtree/decision_tree.cpp\
         -o feed_uvl_rbai -std=c++17 -lstdc++fs
 
-        
+
 RUN g++ -Wall main_tokenize.cpp \
         ./find_occurences.h \
         ./src/graph/concept_node.h \

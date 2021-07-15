@@ -3,6 +3,7 @@ from flask import Flask, json, jsonify, request
 from logging.config import dictConfig
 
 from find_occurences import find_occurences
+from validate_test_input import validate_fcic
 
 with open('config_fcic.json') as config_file:
     CONFIG = json.load(config_file)
@@ -20,9 +21,7 @@ def post_classification_result():
     app.logger.debug('/hitec/classify/concepts/frequency-fcic/run called')
     content = json.loads(request.data.decode('utf-8'))
 
-    texts = [doc["text"] + "\n" for doc in content["dataset"]["documents"]]
-    texts = "".join(texts)
-    texts = texts
+    texts = "".join([doc["text"] + "\n" for doc in content["dataset"]["documents"]])
 
     try:
         dataset = content["params"]["corpus_dataset_name"]
@@ -54,6 +53,8 @@ def post_classification_result():
         app.logger.error("Program errors: " + errors)
 
     result = json.loads(o)
+    #perform validation
+    validate_fcic(content["dataset"]["documents"], app.logger)
 
     return json.dumps(find_occurences(content, result, "feed_uvl_fcic", app.logger)), 200
 

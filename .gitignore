@@ -11,3 +11,6 @@
 /stopwords.txt
 /lib/res/test/
 /lib/CMakeLists.txt
+/lib/feed_uvl_fcic.exe
+/lib/validate_test_input_home_debug.py
+/lib/tokenize.exe

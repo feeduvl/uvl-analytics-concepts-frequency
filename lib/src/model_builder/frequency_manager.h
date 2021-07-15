@@ -273,6 +273,17 @@ private:
 
 
 public:
+
+    std::vector<std::vector<std::string>> lemmatize_tokens(std::vector<std::string> & input){
+        std::vector<std::vector<std::string>> out;
+        out.reserve(input.size());
+        for(std::string & c : input){
+            out.push_back(tokenize_sentence(c, const_cast<char *>(word_delimiters.c_str())));
+        }
+        return out;
+    }
+
+
     explicit frequency_manager(frequency_model & model): model_wrapper(model_depth_wrapper<frequency_model>(model)){
 
     }

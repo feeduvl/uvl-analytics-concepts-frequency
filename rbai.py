@@ -5,6 +5,7 @@ from flask import json as fjson
 from logging.config import dictConfig
 
 from find_occurences import find_occurences
+from validate_test_input import validate_rbai
 
 with open('config_rbai.json') as config_file:
     CONFIG = fjson.load(config_file)
@@ -46,6 +47,9 @@ def post_classification_result():
         app.logger.error("Program errors: " + errors)
 
     result = json.loads(o)
+
+    #perform validation
+    validate_rbai(content["dataset"]["documents"], app.logger)
 
     return json.dumps(find_occurences(content, result, "feed_uvl_rbai", app.logger)), 200
 

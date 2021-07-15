@@ -77,7 +77,7 @@ def validate_rbai(docs, logger):
     j = json.loads(tokenize_output_.stdout.decode("utf-8", errors="replace") ) # should never be an error
     lemmatized_target_concepts = j["concepts"]
 
-    try_num_concepts = [10, 20, 30, 40]
+    try_num_concepts = [10, 20, 30, 40, 50, 60]
 
     for num_concepts in try_num_concepts:
 
@@ -105,11 +105,11 @@ def validate_rbai(docs, logger):
 
         (tp, fp, tn, fn) = get_true_and_false_pos_neg(lemmatized_target_concepts, result["topics"]["concepts"], False)
 
-        logger.info("Precision for N=", num_concepts, ": "+str(precision(tp, fp)))
+        logger.info("Precision for N="+str(num_concepts)+": "+str(precision(tp, fp)))
 
-        logger.info("Recall for N=", num_concepts, ": "+str(recall(tp, fn)))
+        logger.info("Recall for N="+str(num_concepts)+ ": "+str(recall(tp, fn)))
 
-        logger.info("F1 for N=", num_concepts, ": "+str(F1_score(tp, fp, fn)))
+        logger.info("F1 for N="+str(num_concepts)+": "+str(F1_score(tp, fp, fn)))
 
 
 def validate_fcic(docs, logger):
@@ -132,7 +132,7 @@ def validate_fcic(docs, logger):
     j = json.loads(tokenize_output_.stdout.decode("utf-8", errors="replace") ) # should never be an error
     lemmatized_target_concepts = j["concepts"]
 
-    try_num_concepts = [10, 20, 30, 40]
+    try_num_concepts = [10, 20, 30, 40, 50, 60]
 
     for num_concepts in try_num_concepts:
 
@@ -159,9 +159,9 @@ def validate_fcic(docs, logger):
 
         (tp, fp, tn, fn) = get_true_and_false_pos_neg(lemmatized_target_concepts, result["topics"]["concepts"], True)
 
-        logger.info("Precision for N=", num_concepts, ": "+str(precision(tp, fp)))
+        logger.info("Precision for N="+str(num_concepts)+": "+str(precision(tp, fp)))
 
-        logger.info("Recall for N=", num_concepts, ": "+str(recall(tp, fn)))
+        logger.info("Recall for N="+str(num_concepts)+": "+str(recall(tp, fn)))
 
-        logger.info("F1 for N=", num_concepts, ": "+str(F1_score(tp, fp, fn)))
+        logger.info("F1 for N="+str(num_concepts)+": "+str(F1_score(tp, fp, fn)))
 

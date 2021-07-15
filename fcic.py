@@ -41,7 +41,7 @@ def post_classification_result():
             "/app/lib/res/lemmatization-en.txt",
             texts,
             content["params"]["max_num_concepts"],
-            content["params"]["name"],
+            "deprecated param, refactor eventually",
             "/opt/containers/frequency-data/"+dataset]
 
     output = subprocess.run(args, capture_output=True)

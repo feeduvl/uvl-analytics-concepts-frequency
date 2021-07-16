@@ -110,7 +110,7 @@ def validate_rbai(docs, logger):
 
         result = json.loads(o)
 
-        (tp, fp, tn, fn) = get_true_and_false_pos_neg(stringified_target_concepts, result["topics"]["concepts"], False)
+        (tp, fp, tn, fn) = get_true_and_false_pos_neg(stringified_target_concepts, result["topics"]["concepts"])
 
         run_results.append((num_concepts, concept_length, precision(tp, fp), recall(tp, fn), F1_score(tp, fp, fn)))
 
@@ -174,7 +174,7 @@ def validate_fcic(docs, logger):
 
         result = json.loads(o)
 
-        (tp, fp, tn, fn) = get_true_and_false_pos_neg(stringified_target_concepts, result["topics"]["concepts"], True)
+        (tp, fp, tn, fn) = get_true_and_false_pos_neg(stringified_target_concepts, result["topics"]["concepts"])
 
         run_results.append((num_concepts, 1, precision(tp, fp), recall(tp, fn), F1_score(tp, fp, fn)))
 

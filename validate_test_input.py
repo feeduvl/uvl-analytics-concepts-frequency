@@ -29,7 +29,7 @@ def get_true_and_false_pos_neg(target_concepts, actual_concepts, single_words):
                     if w == a:
                         false_positives[ind_a] = False
                         false_negatives[ind_t] = False
-                        print("Found lemma: "+a)
+                        #print("Found lemma: "+a)
                         break
                 else:
                     split = a.split()  # split on whitespaces, newlines, tabs etc
@@ -38,7 +38,7 @@ def get_true_and_false_pos_neg(target_concepts, actual_concepts, single_words):
                         if w == actual_lemma:
                             false_positives[ind_a] = False
                             false_negatives[ind_t] = False
-                            print("Found lemma: " + actual_lemma)
+                            #print("Found lemma: " + actual_lemma)
                             found = True
                             break
                     if found:
@@ -101,7 +101,7 @@ def validate_rbai(docs, logger):
         o = output.stdout.decode("utf-8", errors="replace")
         errors = output.stderr.decode("utf-8", errors="ignore")
 
-        #print("fcic output: "+o)
+        print("rbai output: "+o)
 
         if errors is not None and errors != "":
             logger.error("Program errors: " + errors)

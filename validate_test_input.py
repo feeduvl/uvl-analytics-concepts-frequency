@@ -101,7 +101,7 @@ def validate_rbai(docs, logger):
         o = output.stdout.decode("utf-8", errors="replace")
         errors = output.stderr.decode("utf-8", errors="ignore")
 
-        print("rbai output: "+o)
+        logger.info("rbai output: "+o)
 
         if errors is not None and errors != "":
             logger.error("Program errors: " + errors)

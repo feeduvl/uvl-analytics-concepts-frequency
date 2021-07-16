@@ -32,12 +32,17 @@ def get_true_and_false_pos_neg(target_concepts, actual_concepts, single_words):
                         print("Found lemma: "+a)
                         break
                 else:
-                    for actual_lemma in a:
+                    split = a.split()  # split on whitespaces, newlines, tabs etc
+                    found = False
+                    for actual_lemma in split:
                         if w == actual_lemma:
                             false_positives[ind_a] = False
                             false_negatives[ind_t] = False
                             print("Found lemma: " + actual_lemma)
+                            found = True
                             break
+                    if found:
+                        break
 
     fp = np.count_nonzero(false_positives)
     fn = np.count_nonzero(false_negatives)

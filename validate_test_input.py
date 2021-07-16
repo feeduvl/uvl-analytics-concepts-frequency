@@ -58,16 +58,15 @@ def F1_score(tp, fp, fn):
     return tp/(tp + (0.5*(fp + fn)))
 
 
-def validate_rbai(docs, logger):
-    """
-    Compute precision, recall and F1 metric for the dataset
-    :param text:
-    :param num_concepts:
+def get_ground_truths(logger):
+    '''
+    read the ground truths file and preprocess all concepts
+    :param logger:
     :return:
-    """
-    texts = "".join([doc["text"] + "/n" for doc in docs])
+    '''
+
     df = pd.read_excel(ground_truths_filepath)
-    tokenize_args = ["./lib/tokenize"]
+    tokenize_args = ["./lib/tokenize"]  # does not eliminate stopwords
     target_concepts = (concept for ind, concept in df["Segment"].items())
 
     tokenize_args += target_concepts
@@ -78,9 +77,21 @@ def validate_rbai(docs, logger):
     stringified_target_concepts = ["".join([lemma + " " for lemma in concept]) for concept in lemmatized_target_concepts]
     stringified_target_concepts = list(set(stringified_target_concepts))
 
-    logger.info(str(stringified_target_concepts))
+    #logger.info(str(stringified_target_concepts))
 
-    try_num_concepts = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    return stringified_target_concepts
+
+def validate_rbai(docs, logger):
+    """
+    Compute precision, recall and F1 metric for the dataset
+    :param text:
+    :param num_concepts:
+    :return:
+    """
+    stringified_target_concepts = get_ground_truths(logger)
+
+    texts = "".join([doc["text"] + "/n" for doc in docs])
+    try_num_concepts = [20, 40, 60, 80, 100, 120, 140, 160, 180, 200]
     try_concept_lengths = [1, 2]
 
     run_params = [(a, b) for a in try_num_concepts for b in try_concept_lengths]
@@ -123,6 +134,7 @@ def validate_rbai(docs, logger):
     logger.info("Final validation results: ")
     logger.info(str(run_results))
 
+
 def validate_fcic(docs, logger):
     """
     Compute precision, recall and F1 metric for the dataset
@@ -130,25 +142,11 @@ def validate_fcic(docs, logger):
     :param num_concepts:
     :return:
     """
+    
+    stringified_target_concepts = get_ground_truths(logger)
+
     texts = "".join([doc["text"] + "/n" for doc in docs])
-    df = pd.read_excel(ground_truths_filepath)
-    tokenize_args = ["./lib/tokenize"]
-    target_concepts = (concept for ind, concept in df["Segment"].items())
-
-    tokenize_args += target_concepts
-
-    #print(args)
-
-    tokenize_output_ = subprocess.run(tokenize_args, capture_output=True)
-    j = json.loads(tokenize_output_.stdout.decode("utf-8", errors="replace") ) # should never be an error
-
-    lemmatized_target_concepts = j["concepts"]
-    stringified_target_concepts = ["".join([lemma + " " for lemma in concept]) for concept in lemmatized_target_concepts]
-    stringified_target_concepts = list(set(stringified_target_concepts))
-
-    logger.info(str(stringified_target_concepts))
-
-    try_num_concepts = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    try_num_concepts = [20, 50, 80, 110, 140, 170, 200]  # do bigger intervals because it takes longer to compute
     run_results = []
 
     for num_concepts in try_num_concepts:

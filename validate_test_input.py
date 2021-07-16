@@ -145,7 +145,8 @@ def validate_fcic(docs, logger):
     j = json.loads(tokenize_output_.stdout.decode("utf-8", errors="replace") ) # should never be an error
     lemmatized_target_concepts = j["concepts"]
 
-    try_num_concepts = [10, 20, 30, 40, 50, 60]
+    try_num_concepts = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    run_results = []
 
     for num_concepts in try_num_concepts:
 
@@ -172,9 +173,12 @@ def validate_fcic(docs, logger):
 
         (tp, fp, tn, fn) = get_true_and_false_pos_neg(lemmatized_target_concepts, result["topics"]["concepts"], True)
 
-        logger.info("Precision for N="+str(num_concepts)+": "+str(precision(tp, fp)))
+        run_results.append((num_concepts, 1, precision(tp, fp), recall(tp, fn), F1_score(tp, fp, fn)))
 
-        logger.info("Recall for N="+str(num_concepts)+": "+str(recall(tp, fn)))
+        #logger.info("Precision for N="+str(num_concepts)+": "+str(precision(tp, fp)))
 
-        logger.info("F1 for N="+str(num_concepts)+": "+str(F1_score(tp, fp, fn)))
+        #logger.info("Recall for N="+str(num_concepts)+": "+str(recall(tp, fn)))
 
+        #logger.info("F1 for N="+str(num_concepts)+": "+str(F1_score(tp, fp, fn)))
+
+    logger.info("Validation results: "+str(run_results))

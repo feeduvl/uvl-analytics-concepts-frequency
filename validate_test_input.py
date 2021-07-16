@@ -83,12 +83,14 @@ def validate_rbai(docs, logger):
     lemmatized_target_concepts = j["concepts"]
 
     try_num_concepts = [10, 20, 30, 40, 50, 60]
+    try_concept_lengths = [1, 2]
 
-    for num_concepts in try_num_concepts:
+    run_params = [(a, b) for a in try_num_concepts for b in try_concept_lengths]
 
+    for num_concepts, concept_length in run_params:
         rbai_args = ['./lib/feed_uvl_rbai',
                 "run_algorithm",
-                "2",
+                str(concept_length),
                 "/app/lib/res/frequencies.txt",
                 "/app/lib/res/stopwords.txt",
                 "/app/lib/res/lemmatization-en.txt",
@@ -110,11 +112,11 @@ def validate_rbai(docs, logger):
 
         (tp, fp, tn, fn) = get_true_and_false_pos_neg(lemmatized_target_concepts, result["topics"]["concepts"], False)
 
-        logger.info("Precision for N="+str(num_concepts)+": "+str(precision(tp, fp)))
+        logger.info("Precision for N="+str(num_concepts)+" concept length= "+str(concept_length)+": "+str(precision(tp, fp)))
 
-        logger.info("Recall for N="+str(num_concepts)+ ": "+str(recall(tp, fn)))
+        logger.info("Recall for N="+str(num_concepts)+" concept length= "+str(concept_length)+": "+str(recall(tp, fn)))
 
-        logger.info("F1 for N="+str(num_concepts)+": "+str(F1_score(tp, fp, fn)))
+        logger.info("F1 for N="+str(num_concepts)+" concept length= "+str(concept_length)+": "+str(F1_score(tp, fp, fn)))
 
 
 def validate_fcic(docs, logger):

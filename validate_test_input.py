@@ -8,12 +8,11 @@ import os
 ground_truths_filepath = "/opt/containers/validation/ground truth all.xlsx"
 
 
-def get_true_and_false_pos_neg(target_concepts, actual_concepts, single_words):
+def get_true_and_false_pos_neg(target_concepts, actual_concepts):
     '''
 
-    :param target_concepts: list of lists of strings
+    :param target_concepts: list of strings
     :param actual_concepts:
-    :param single_words: if true, actual_concepts is a list of strings, else a list of lists of strings
     :return: (true_positives, false_positives, true_negatives, false_negatives)
     '''
 
@@ -22,27 +21,22 @@ def get_true_and_false_pos_neg(target_concepts, actual_concepts, single_words):
     # no negative votes in actual_concepts
 
     for ind_t, t in enumerate(target_concepts):
+        t_split = t.split()
         for ind_a, a in enumerate(actual_concepts):
-            for w in t:
-                # print("Comparing actual: ", a, " with expected: ", w)
-                if single_words:
-                    if w == a:
+            for w in t_split:
+                if w == "":
+                    continue  # shouldn't happen anyway
+                a_split = a.split()  # split on whitespaces, newlines, tabs etc
+                found = False
+                for actual_lemma in a_split:
+                    if w == actual_lemma:
                         false_positives[ind_a] = False
                         false_negatives[ind_t] = False
-                        #print("Found lemma: "+a)
+                        # print("Found lemma: " + actual_lemma)
+                        found = True
                         break
-                else:
-                    split = a.split()  # split on whitespaces, newlines, tabs etc
-                    found = False
-                    for actual_lemma in split:
-                        if w == actual_lemma:
-                            false_positives[ind_a] = False
-                            false_negatives[ind_t] = False
-                            #print("Found lemma: " + actual_lemma)
-                            found = True
-                            break
-                    if found:
-                        break
+                if found:
+                    break
 
     fp = np.count_nonzero(false_positives)
     fn = np.count_nonzero(false_negatives)
@@ -81,7 +75,10 @@ def validate_rbai(docs, logger):
     tokenize_output_ = subprocess.run(tokenize_args, capture_output=True)
     j = json.loads(tokenize_output_.stdout.decode("utf-8", errors="replace") ) # should never be an error
     lemmatized_target_concepts = j["concepts"]
-    lemmatized_target_concepts = set(lemmatized_target_concepts)
+    stringified_target_concepts = ["".join([lemma + " " for lemma in concept]) for concept in lemmatized_target_concepts]
+    stringified_target_concepts = list(set(stringified_target_concepts))
+
+    logger.info(str(stringified_target_concepts))
 
     try_num_concepts = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     try_concept_lengths = [1, 2]
@@ -113,7 +110,7 @@ def validate_rbai(docs, logger):
 
         result = json.loads(o)
 
-        (tp, fp, tn, fn) = get_true_and_false_pos_neg(lemmatized_target_concepts, result["topics"]["concepts"], False)
+        (tp, fp, tn, fn) = get_true_and_false_pos_neg(stringified_target_concepts, result["topics"]["concepts"], False)
 
         run_results.append((num_concepts, concept_length, precision(tp, fp), recall(tp, fn), F1_score(tp, fp, fn)))
 
@@ -144,8 +141,12 @@ def validate_fcic(docs, logger):
 
     tokenize_output_ = subprocess.run(tokenize_args, capture_output=True)
     j = json.loads(tokenize_output_.stdout.decode("utf-8", errors="replace") ) # should never be an error
+
     lemmatized_target_concepts = j["concepts"]
-    lemmatized_target_concepts = set(lemmatized_target_concepts)
+    stringified_target_concepts = ["".join([lemma + " " for lemma in concept]) for concept in lemmatized_target_concepts]
+    stringified_target_concepts = list(set(stringified_target_concepts))
+
+    logger.info(str(stringified_target_concepts))
 
     try_num_concepts = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     run_results = []
@@ -173,7 +174,7 @@ def validate_fcic(docs, logger):
 
         result = json.loads(o)
 
-        (tp, fp, tn, fn) = get_true_and_false_pos_neg(lemmatized_target_concepts, result["topics"]["concepts"], True)
+        (tp, fp, tn, fn) = get_true_and_false_pos_neg(stringified_target_concepts, result["topics"]["concepts"], True)
 
         run_results.append((num_concepts, 1, precision(tp, fp), recall(tp, fn), F1_score(tp, fp, fn)))
 

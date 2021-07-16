@@ -81,6 +81,7 @@ def validate_rbai(docs, logger):
     tokenize_output_ = subprocess.run(tokenize_args, capture_output=True)
     j = json.loads(tokenize_output_.stdout.decode("utf-8", errors="replace") ) # should never be an error
     lemmatized_target_concepts = j["concepts"]
+    lemmatized_target_concepts = set(lemmatized_target_concepts)
 
     try_num_concepts = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     try_concept_lengths = [1, 2]
@@ -144,6 +145,7 @@ def validate_fcic(docs, logger):
     tokenize_output_ = subprocess.run(tokenize_args, capture_output=True)
     j = json.loads(tokenize_output_.stdout.decode("utf-8", errors="replace") ) # should never be an error
     lemmatized_target_concepts = j["concepts"]
+    lemmatized_target_concepts = set(lemmatized_target_concepts)
 
     try_num_concepts = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     run_results = []

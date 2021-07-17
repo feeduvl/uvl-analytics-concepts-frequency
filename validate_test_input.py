@@ -142,7 +142,7 @@ def validate_fcic(docs, logger):
     :param num_concepts:
     :return:
     """
-    
+
     stringified_target_concepts = get_ground_truths(logger)
 
     texts = "".join([doc["text"] + "/n" for doc in docs])

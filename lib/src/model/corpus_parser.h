@@ -2,8 +2,8 @@
 // Created by Jakob Weichselbaumer on 11.05.2021.
 //
 
-#ifndef FEED_UVL_FINDING_COMPARATIVELY_FILE_ACCEPTER_H
-#define FEED_UVL_FINDING_COMPARATIVELY_FILE_ACCEPTER_H
+#ifndef FEED_UVL_FINDING_COMPARATIVELY_CORPUS_PARSER_H
+#define FEED_UVL_FINDING_COMPARATIVELY_CORPUS_PARSER_H
 
 #include <filesystem>
 
@@ -11,7 +11,7 @@ using namespace std;
 /**
  * Virtual class to abstract the "process corpus file" step in frequency_model pretraining/algorithm execution
  */
-template <class m> class file_accepter{
+template <class m> class corpus_parser{
 public:
     /**
      * Check if this file is acceptable for use in the algorithm
@@ -28,4 +28,4 @@ public:
 };
 
 
-#endif //FEED_UVL_FINDING_COMPARATIVELY_FILE_ACCEPTER_H
+#endif //FEED_UVL_FINDING_COMPARATIVELY_CORPUS_PARSER_H

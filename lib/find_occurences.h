@@ -9,17 +9,20 @@
 #include <string>
 #include "src/io/json.h"
 #include "src/model/model.h"
-#include "src/model/frequency_accepter.h"
+#include "src/model/frequency_corpus_parser.h"
 #include "src/model_builder/directory_walker.h"
-#include "src/model_builder/frequency_manager.h"
+#include "src/model_builder/algorithm_runner.h"
 
 using namespace std;
-json::JSON find_occurences(string & text, vector<string> & concepts, unsigned int & concept_length){
+json::JSON find_occurences(string & text, vector<string> & concepts, unsigned int & concept_length,
+                           string & stopwords_file, string & lemmatization_file){
 
     frequency_model model = frequency_model(1); // arbitrary concept length
-    frequency_manager manager = frequency_manager(model);  //  TODO expose this as a static method
+    algorithm_runner runner = algorithm_runner(model);  //  TODO expose this as a static method
+    runner.read_lemmatization_map(lemmatization_file);
+    runner.read_stopwords(stopwords_file);
 
-    vector<unsigned int > occurences = manager.find_occurences(text, concept_length,concepts);
+    vector<unsigned int > occurences = runner.find_occurences(text, concept_length,concepts);
 
     json::JSON j;
     j["occurences"] = json::Array();

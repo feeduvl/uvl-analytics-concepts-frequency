@@ -6,7 +6,7 @@
 #include <iostream>
 #include "src/io/json.h"
 #include "src/model/model.h"
-#include "src/model_builder/frequency_manager.h"
+#include "src/model_builder/algorithm_runner.h"
 
 using namespace std;
 /**
@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
 
 
     frequency_model model = frequency_model(1);
-    frequency_manager manager = frequency_manager(model);
+    algorithm_runner manager = algorithm_runner(model);
 
     vector<vector<string>> concepts = manager.lemmatize_tokens(lemmatize_these);
 

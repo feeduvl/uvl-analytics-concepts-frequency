@@ -11,13 +11,13 @@
 #include <vector>
 #include <filesystem>
 #include "../../includes/rapidxml/rapidxml.hpp"
-#include "../model/file_accepter.h"
+#include "../model/corpus_parser.h"
 
 using namespace std;
 
 template <class M> class directory_walker{
 public:
-    explicit directory_walker(const string& directory_path, const file_accepter<M> & f_a, const M & m , bool squelch) {
+    explicit directory_walker(const string& directory_path, const corpus_parser<M> & f_a, const M & m , bool squelch) {
         for(const auto & entry : filesystem::directory_iterator(directory_path)){
             if(entry.is_directory()){
                 directory_walker<M>(entry.path().string(), f_a, m, squelch);

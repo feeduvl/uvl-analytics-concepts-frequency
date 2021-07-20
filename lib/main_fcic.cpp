@@ -4,9 +4,9 @@
 
 #include "src/io/json.h"
 #include "src/model/model.h"
-#include "src/model/frequency_accepter.h"
+#include "src/model/frequency_corpus_parser.h"
 #include "src/model_builder/directory_walker.h"
-#include "src/model_builder/frequency_manager.h"
+#include "src/model_builder/algorithm_runner.h"
 #include "src/dtree/decision_tree.h"
 #include "src/util/str_util.h"
 #include "./find_occurences.h"
@@ -34,27 +34,27 @@ int main(int argc, char** argv) {
         string name = argv[8];
 
         frequency_model model = frequency_model(concept_length);
-        frequency_manager manager = frequency_manager(model);
+        algorithm_runner runner = algorithm_runner(model);
 
         /*
          * Read in word frequency statistics - use these to find candidate concepts
          */
-        manager.read_corpus_frequencies_file(corpus_frequencies_file);
-        manager.read_lemmatization_map(lemmatization_file);
-        manager.read_stopwords(stopwords_file);
+        runner.read_corpus_frequencies_file(corpus_frequencies_file);
+        runner.read_lemmatization_map(lemmatization_file);
+        runner.read_stopwords(stopwords_file);
 
         string training_dir_path = argv[9];
-        vector<string> candidate_concepts = manager.run_fcic(analyze_text, return_num_concepts, false);
+        vector<string> candidate_concepts = runner.run_fcic(analyze_text, return_num_concepts, false);
 
         /*
          * Gather data for decision tree
          */
-        auto accepter_fcic = frequency_accepter(frequency_accepter::Mode::DEC_TREE);
+        auto fcic_parser = frequency_corpus_parser(frequency_corpus_parser::Mode::DEC_TREE);
         frequency_model m = frequency_model((unsigned int) concept_length);
         m.setCandidateTokensDecTree(candidate_concepts);
-        directory_walker walker = directory_walker<frequency_model>(training_dir_path, accepter_fcic, m, true);
+        directory_walker walker = directory_walker<frequency_model>(training_dir_path, fcic_parser, m, true);
 
-        vector<vector<bool>> decision_tree_data = manager.get_model().getDecTreeTrainingData();  // the data gathered from the input
+        vector<vector<bool>> decision_tree_data = runner.get_model().getDecTreeTrainingData();  // the data gathered from the input
 
         decision_tree_data.insert(decision_tree_data.end(), m.getDecTreeTrainingData().begin(), m.getDecTreeTrainingData().end());  // concatenate the two datasets
 
@@ -96,13 +96,17 @@ int main(int argc, char** argv) {
     } else if(command == "find_occurences"){
         string text = argv[2];
         unsigned int concept_length = stoi(argv[3]);
+
+        string stopwords_file = argv[4];
+        string lemmatization_file = argv[5];
+
         vector<string> find_lemmas;
-        find_lemmas.reserve(argc - 4);
-        for(int i = 0; i < argc - 4; i++){
-            find_lemmas.emplace_back(argv[4+i]);
+        find_lemmas.reserve(argc - 6);
+        for(int i = 0; i < argc - 6; i++){
+            find_lemmas.emplace_back(argv[6+i]);
         }
 
-        json::JSON j = find_occurences(text, find_lemmas, concept_length);
+        json::JSON j = find_occurences(text, find_lemmas, concept_length, stopwords_file, lemmatization_file);
 
         cout << j << endl;
 

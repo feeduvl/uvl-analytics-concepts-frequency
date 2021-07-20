@@ -2,26 +2,26 @@
 // Created by Jakob Weichselbaumer on 11.05.2021.
 //
 
-#ifndef FEED_UVL_FINDING_COMPARATIVELY_FREQUENCY_ACCEPTER_H
-#define FEED_UVL_FINDING_COMPARATIVELY_FREQUENCY_ACCEPTER_H
+#ifndef FEED_UVL_FINDING_COMPARATIVELY_FREQUENCY_CORPUS_PARSER_H
+#define FEED_UVL_FINDING_COMPARATIVELY_FREQUENCY_CORPUS_PARSER_H
 #include <iostream>
 #include <string>
 #include "../../includes/rapidxml/rapidxml.hpp"
-#include "../model/file_accepter.h"
+#include "../model/corpus_parser.h"
 #include "../model_builder/xml_reader.h"
 #include "../model/frequency_model.h"
-#include "../model/model_depth_wrapper.h"
+#include "../model/pipeline.h"
 #include "../util/str_util.h"
 
 using namespace std;
 
-class frequency_accepter : public file_accepter<frequency_model> {
+class frequency_corpus_parser : public corpus_parser<frequency_model> {
 public:
     [[nodiscard]] bool file_is_acceptable(const filesystem::directory_entry & entry) const override {
         return !entry.is_directory() && str_util::hasEnding(entry.path().string(), ".xml");
     }
 
-    static void word_search(xml_node<> * word_container, model_depth_wrapper<frequency_model> & model){
+    static void word_search(xml_node<> * word_container, pipeline<frequency_model> & model){
         for(xml_node<> * maybe_word_node = word_container->first_node(); maybe_word_node; maybe_word_node = maybe_word_node->next_sibling()){
             if(maybe_word_node->name()==w_container_hi || maybe_word_node->name()==w_container_mw){  // highlighted word or multi-word
                 word_search(maybe_word_node, model);
@@ -66,7 +66,7 @@ public:
         }
     }
 
-    static void decision_tree_word_search(xml_node<> * word_container, model_depth_wrapper<frequency_model> & model, vector<bool> & sentence) {
+    static void decision_tree_word_search(xml_node<> * word_container, pipeline<frequency_model> & model, vector<bool> & sentence) {
         for (xml_node<> *maybe_word_node = word_container->first_node(); maybe_word_node; maybe_word_node = maybe_word_node->next_sibling()) {
             if (maybe_word_node->name() == w_container_hi ||
                 maybe_word_node->name() == w_container_mw) {  // highlighted word or multi-word
@@ -87,7 +87,7 @@ public:
         }
     }
 
-    void recursive_sentence_search(const string& sentence_container_tagname, const xml_node<> * parent_node, model_depth_wrapper<frequency_model> & model) const{
+    void recursive_sentence_search(const string& sentence_container_tagname, const xml_node<> * parent_node, pipeline<frequency_model> & model) const{
         for(xml_node<> * sentence_container = parent_node->first_node(sentence_container_tagname.c_str()); sentence_container; sentence_container = sentence_container->next_sibling()){
             recursive_sentence_search(s_container_div, sentence_container, model);
             recursive_sentence_search(s_container_head, sentence_container, model);
@@ -126,7 +126,7 @@ public:
         if(text_node == nullptr){
             // cout << "Didn't find written text node in document: "<< filepath<< endl;
         } else {
-            model_depth_wrapper modelDepthWrapper = model_depth_wrapper(model);
+            pipeline modelDepthWrapper = pipeline(model);
             recursive_sentence_search(s_container_div, text_node, modelDepthWrapper);
             recursive_sentence_search(s_container_head, text_node, modelDepthWrapper);
             recursive_sentence_search(s_container_p, text_node, modelDepthWrapper);
@@ -150,26 +150,26 @@ public:
     static string word_tag;
 
     enum Mode{TRAIN_CORPUS, DEC_TREE}; // an enum for type of run
-    explicit frequency_accepter(Mode mode);
+    explicit frequency_corpus_parser(Mode mode);
 private:
     Mode mode;
 
 };
 
-frequency_accepter::frequency_accepter(Mode mode) {
+frequency_corpus_parser::frequency_corpus_parser(Mode mode) {
     this->mode = mode;
 }
 
-string frequency_accepter::s_container_div = "div";
-string frequency_accepter::s_container_p = "p";
-string frequency_accepter::s_container_head = "head";
+string frequency_corpus_parser::s_container_div = "div";
+string frequency_corpus_parser::s_container_p = "p";
+string frequency_corpus_parser::s_container_head = "head";
 
-string frequency_accepter::w_container_hi = "hi";  // highlights
-string frequency_accepter::w_container_mw = "mw";  // multi-words
-string frequency_accepter::word_tag = "w";
+string frequency_corpus_parser::w_container_hi = "hi";  // highlights
+string frequency_corpus_parser::w_container_mw = "mw";  // multi-words
+string frequency_corpus_parser::word_tag = "w";
 
-vector<string> frequency_accepter::allowed_word_tags = {"AJ0", "AJC", "AJS", "AV0", "ITJ", "NN0", "NN1", "NN2",
+vector<string> frequency_corpus_parser::allowed_word_tags = {"AJ0", "AJC", "AJS", "AV0", "ITJ", "NN0", "NN1", "NN2",
                                                            "NP0", "ORD","VM0", "VVB", "VVD", "VVG", "VVI", "VVN", "VVZ", "XX0", "ZZ0" };
 
 
-#endif //FEED_UVL_FINDING_COMPARATIVELY_FREQUENCY_ACCEPTER_H
+#endif //FEED_UVL_FINDING_COMPARATIVELY_FREQUENCY_CORPUS_PARSER_H

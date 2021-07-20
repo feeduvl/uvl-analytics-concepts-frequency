@@ -15,16 +15,16 @@ add_executable(feed_uvl_finding_comparatively
 
         src/graph/concept_node.h
 
-        src/model/frequency_accepter.h
+        src/model/frequency_corpus_parser.h
         src/model/frequency_model.h
-        src/model/file_accepter.h
+        src/model/corpus_parser.h
         src/model/model.h
-        src/model/model_depth_wrapper.h
+        src/model/pipeline.h
 
         src/model_builder/xml_reader.h
         src/model_builder/directory_walker.h
-        src/model_builder/frequency_manager.h
+        src/model_builder/algorithm_runner.h
         src/util/str_util.h
-        src/io/json.h src/dtree/decision_tree.h src/dtree/decision_tree.cpp src/util/math_util.h find_occurences.h main_tokenize.cpp)
+        src/io/json.h src/dtree/decision_tree.h src/dtree/decision_tree.cpp src/util/math_util.h find_occurences.h)
 
 target_compile_features(feed_uvl_finding_comparatively PRIVATE cxx_std_17)

@@ -2,8 +2,8 @@
 // Created by Jakob Weichselbaumer on 15.05.2021.
 //
 
-#ifndef FEED_UVL_FINDING_COMPARATIVELY_FREQUENCY_MANAGER_H
-#define FEED_UVL_FINDING_COMPARATIVELY_FREQUENCY_MANAGER_H
+#ifndef FEED_UVL_FINDING_COMPARATIVELY_ALGORITHM_RUNNER_H
+#define FEED_UVL_FINDING_COMPARATIVELY_ALGORITHM_RUNNER_H
 
 #include <utility>
 #include <vector>
@@ -16,7 +16,7 @@
 #include <chrono>
 #include <algorithm>
 
-#include "../model/model_depth_wrapper.h"
+#include "../model/pipeline.h"
 #include "../model/frequency_model.h"
 #include "../graph/concept_node.h"
 #include "../util/str_util.h"
@@ -28,8 +28,8 @@ using namespace std;
 /**
  * Read in the frequency file and store the contents in an accessible format
  */
-class frequency_manager{
-    model_depth_wrapper<frequency_model> model_wrapper;
+class algorithm_runner{
+    pipeline<frequency_model> pipeline;
 
     string frequencies_filename;
     string lemmatization_filename;
@@ -99,7 +99,7 @@ private:
                 token = token.substr(0, token.size()-2);
                 //cout << "Stripped possessive apostrophe: 's, yielding word: " << token << endl;
             }
-            ++model_wrapper.m.total_words_read;
+            ++pipeline.m.total_words_read;
 
             bool is_numeric = true;
             try{
@@ -111,7 +111,7 @@ private:
             const auto it = lower_bound(stopwords_sorted.begin(), stopwords_sorted.end(), token);
             if(!is_numeric && token.size() >= 3 && (it == stopwords_sorted.end() || *it != token)){
                 //cout << "Got token: " << token << endl;
-                ++model_wrapper.m.total_words_into_model;
+                ++pipeline.m.total_words_into_model;
                 auto iter = lemma_map.find(token);
                 if(iter!=lemma_map.end()){
                     //cout << "Lemma for '" << token << "' : " << iter->second << endl;
@@ -284,7 +284,7 @@ public:
     }
 
 
-    explicit frequency_manager(frequency_model & model): model_wrapper(model_depth_wrapper<frequency_model>(model)){
+    explicit algorithm_runner(frequency_model & model): pipeline(::pipeline<frequency_model>(model)){
 
     }
 
@@ -398,7 +398,7 @@ public:
         size_t idx = 0;
         for(auto & t : term){
             vector<string> singleton = {t};
-            concept_node<string> * token_node = model_wrapper.m.getRootNode()->get_node(singleton);
+            concept_node<string> * token_node = pipeline.m.getRootNode()->get_node(singleton);
 
             //cout << "Singleton: " << vector_to_string(singleton) << endl;
 
@@ -427,10 +427,10 @@ public:
         return log_likelihood;
     }
     void recurse_find_string_concepts_and_frequencies(){
-        recurse_find_string_concepts_and_frequencies(model_wrapper.m.getRootNode(), "", true);
+        recurse_find_string_concepts_and_frequencies(pipeline.m.getRootNode(), "", true);
     }
     void recurse_find_vector_concepts_and_frequencies(){
-        recurse_find_vector_concepts_and_frequencies(model_wrapper.m.getRootNode(), vector<string>(), true);
+        recurse_find_vector_concepts_and_frequencies(pipeline.m.getRootNode(), vector<string>(), true);
     }
 
 private:
@@ -455,22 +455,22 @@ private:
             this->tokenized_input = tokens;
         }
         for(const auto& sentence : tokens){
-            this->model_wrapper.reset_sentence();
+            this->pipeline.reset_sentence();
             for (const string& token: sentence) {
                 bool was_inserted;
                 unsigned int upper;
-                if(model_wrapper.pipeline_loaded){
-                    upper = model_wrapper.m.getTermLength();
+                if(pipeline.pipeline_loaded){
+                    upper = pipeline.m.getTermLength();
                 } else{
-                    upper = model_wrapper.current_word_index + 1;
+                    upper = pipeline.current_word_index + 1;
                 }
                 for(int i = 0; i < upper; i++){
-                    model_wrapper.list[i] = model_wrapper.list[i]->add_child(token, was_inserted, model_wrapper.m);
+                    pipeline.list[i] = pipeline.list[i]->add_child(token, was_inserted, pipeline.m);
                     if(was_inserted){
-                        model_wrapper.m.concepts++;
+                        pipeline.m.concepts++;
                     }
                 }
-                model_wrapper.next_word();
+                pipeline.next_word();
             }
         }
     }
@@ -535,7 +535,7 @@ public:
         recurse_find_vector_concepts_and_frequencies();
 
         vector<double> log_likelihoods_input;
-        auto n_d = (double)model_wrapper.m.total_words_into_model;
+        auto n_d = (double)pipeline.m.total_words_into_model;
         auto n_c = (double)total_words_corpus;
 
         for(int i = 0; i < input_frequencies.size(); i++){
@@ -559,7 +559,7 @@ public:
     }
 
     const frequency_model & get_model(){
-        return model_wrapper.m;
+        return pipeline.m;
     }
     vector<string> run_fcic(string & analyze_this, int & return_num_concepts, bool from_file){
         get_tokens(analyze_this, from_file, true);
@@ -596,4 +596,4 @@ public:
 
 };
 
-#endif //FEED_UVL_FINDING_COMPARATIVELY_FREQUENCY_MANAGER_H
+#endif //FEED_UVL_FINDING_COMPARATIVELY_ALGORITHM_RUNNER_H

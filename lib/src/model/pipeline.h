@@ -2,8 +2,8 @@
 // Created by Jakob Weichselbaumer on 15.05.2021.
 //
 
-#ifndef FEED_UVL_FINDING_COMPARATIVELY_MODEL_DEPTH_WRAPPER_H
-#define FEED_UVL_FINDING_COMPARATIVELY_MODEL_DEPTH_WRAPPER_H
+#ifndef FEED_UVL_FINDING_COMPARATIVELY_PIPELINE_H
+#define FEED_UVL_FINDING_COMPARATIVELY_PIPELINE_H
 
 #include <vector>
 #include <string>
@@ -12,7 +12,7 @@
 /**
  * Provide access to the constituent words of a term within the model's data structure
  */
-template <class model_type> struct model_depth_wrapper {
+template <class model_type> struct pipeline {
 
     const model_type & m;
     mutable vector<concept_node<string>*> list = vector<concept_node<string>*>();  //  concept length of n <=> list of n stored concept nodes
@@ -20,7 +20,7 @@ template <class model_type> struct model_depth_wrapper {
     mutable unsigned int current_word_index = 0;  //  only need to count to the term length
     mutable bool pipeline_loaded = false;
 
-    explicit model_depth_wrapper(const model_type & model) : m(model){
+    explicit pipeline(const model_type & model) : m(model){
         reset_sentence();
     }
 
@@ -47,4 +47,4 @@ template <class model_type> struct model_depth_wrapper {
 
 };
 
-#endif //FEED_UVL_FINDING_COMPARATIVELY_MODEL_DEPTH_WRAPPER_H
+#endif //FEED_UVL_FINDING_COMPARATIVELY_PIPELINE_H

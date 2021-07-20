@@ -4,9 +4,9 @@
 
 #include "src/io/json.h"
 #include "src/model/model.h"
-#include "src/model/frequency_accepter.h"
+#include "src/model/frequency_corpus_parser.h"
 #include "src/model_builder/directory_walker.h"
-#include "src/model_builder/frequency_manager.h"
+#include "src/model_builder/algorithm_runner.h"
 #include "src/dtree/decision_tree.h"
 #include "src/util/str_util.h"
 #include "./find_occurences.h"
@@ -26,8 +26,8 @@ int main(int argc, char** argv) {
         string concept_length = argv[2];
         string train_dir_path = argv[3];
         string outfile_path = argv[4];
-        // build our frequency_model here using the algorithm of the next argument with the files in the directory given by the following argument
-        auto faccepter = frequency_accepter(frequency_accepter::Mode::TRAIN_CORPUS);
+        // build our frequency_model here
+        auto faccepter = frequency_corpus_parser(frequency_corpus_parser::Mode::TRAIN_CORPUS);
         frequency_model m = frequency_model(stoi(concept_length));
         directory_walker walker = directory_walker<frequency_model>(train_dir_path, faccepter, m, false);
         m.write_concepts_to_file(outfile_path);
@@ -47,13 +47,13 @@ int main(int argc, char** argv) {
         string name = argv[8];
 
         frequency_model model = frequency_model(concept_length);
-        frequency_manager manager = frequency_manager(model);
+        algorithm_runner runner = algorithm_runner(model);
 
-        manager.read_corpus_frequencies_file(corpus_frequencies_file);
-        manager.read_lemmatization_map(lemmatization_file);
-        manager.read_stopwords(stopwords_file);
+        runner.read_corpus_frequencies_file(corpus_frequencies_file);
+        runner.read_lemmatization_map(lemmatization_file);
+        runner.read_stopwords(stopwords_file);
 
-        json::JSON algo_return = manager.run_rbai(analyze_text, return_num_concepts, false);
+        json::JSON algo_return = runner.run_rbai(analyze_text, return_num_concepts, false);
         algo_return["name"] = name;
         // program output, then exit
         cout << algo_return << endl;
@@ -68,7 +68,6 @@ int main(int argc, char** argv) {
         }
 
         json::JSON j = find_occurences(text, find_lemmas, concept_length);
-
         cout << j << endl;
 
     } else {

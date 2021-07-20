@@ -61,15 +61,19 @@ int main(int argc, char** argv) {
     } else if(command == "find_occurences"){
         string text = argv[2];
         unsigned int concept_length = stoi(argv[3]);
+
+        string stopwords_file = argv[4];
+        string lemmatization_file = argv[5];
+
         vector<string> find_lemmas;
-        find_lemmas.reserve(argc - 4);
-        for(int i = 0; i < argc - 4; i++){
-            find_lemmas.emplace_back(argv[4+i]);
+        find_lemmas.reserve(argc - 6);
+        for(int i = 0; i < argc - 6; i++){
+            find_lemmas.emplace_back(argv[6+i]);
         }
 
-        json::JSON j = find_occurences(text, find_lemmas, concept_length);
-        cout << j << endl;
+        json::JSON j = find_occurences(text, find_lemmas, concept_length, stopwords_file, lemmatization_file);
 
+        cout << j << endl;
     } else {
         cerr << "Got undefined command: '" << command << "', exiting." << endl;
         return 1;

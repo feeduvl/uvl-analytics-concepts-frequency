@@ -20,7 +20,9 @@ def find_occurences(content, result, program_name, logger):
         args = ['./lib/'+program_name,
                 "find_occurences",
                 doc["text"],
-                content["params"]["term_length"]]
+                content["params"]["term_length"],
+                "/app/lib/res/stopwords.txt",
+                "/app/lib/res/lemmatization-en.txt"]
 
         args += result["topics"]["concepts"]
 

@@ -29,7 +29,7 @@ using namespace std;
  * Read in the frequency file and store the contents in an accessible format
  */
 class algorithm_runner{
-    pipeline<frequency_model> pipeline;
+    ::pipeline<frequency_model> pipeline;
 
     string frequencies_filename;
     string lemmatization_filename;

@@ -91,7 +91,7 @@ def validate_rbai(docs, logger):
     stringified_target_concepts = get_ground_truths(logger)
 
     texts = "".join([doc["text"] + "/n" for doc in docs])
-    try_num_concepts = [20, 40, 60, 80, 100, 120, 140, 160, 180, 200]
+    try_num_concepts = [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 800]
     try_concept_lengths = [1, 2]
 
     run_params = [(a, b) for a in try_num_concepts for b in try_concept_lengths]
@@ -146,7 +146,7 @@ def validate_fcic(docs, logger):
     stringified_target_concepts = get_ground_truths(logger)
 
     texts = "".join([doc["text"] + "/n" for doc in docs])
-    try_num_concepts = [20, 50, 80, 110, 140, 170, 200]  # do bigger intervals because it takes longer to compute
+    try_num_concepts = [20, 50, 80, 110, 140, 170, 200, 800]  # do bigger intervals because it takes longer to compute
     run_results = []
 
     for num_concepts in try_num_concepts:

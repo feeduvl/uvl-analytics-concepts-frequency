@@ -50,7 +50,7 @@ def post_classification_result():
     result = json.loads(o)
 
     #perform validation
-    #validate_rbai(content["dataset"]["documents"], app.logger)
+    validate_rbai(content["dataset"]["documents"], app.logger)
 
     return json.dumps(find_occurences(content, result, "feed_uvl_rbai", app.logger)), 200
 

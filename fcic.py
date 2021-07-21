@@ -54,7 +54,7 @@ def post_classification_result():
 
     result = json.loads(o)
     #perform validation
-    validate_fcic(content["dataset"]["documents"], app.logger)
+    #validate_fcic(content["dataset"]["documents"], app.logger)
 
     return json.dumps(find_occurences(content, result, "feed_uvl_fcic", app.logger)), 200
 

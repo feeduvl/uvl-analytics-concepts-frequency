@@ -52,9 +52,9 @@ RUN echo "Result after CMake build: " && ls
 
 #RUN yes | apt install python3 python3-pip && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt requirements.txt
+# COPY requirements.txt requirements.txt
+WORKDIR ..
 RUN pip3 install --upgrade pip -r requirements.txt
 
-WORKDIR ..
 EXPOSE 9658
 CMD [ "python3", "./rbai.py" ]

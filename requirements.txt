@@ -1,6 +1,0 @@
-Flask==1.0.2
-pandas
-scipy
-scikit-learn
-xlrd
-openpyxl

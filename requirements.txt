@@ -1,4 +1,4 @@
-Flask==1.0.2
+Flask==2.1.1
 pandas
 scipy
 scikit-learn
